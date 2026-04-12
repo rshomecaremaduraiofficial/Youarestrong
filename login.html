@@ -766,7 +766,7 @@
                     showPopup(username);
 
                     popupOkBtn.onclick = function () {
-                        window.location.href = "profile.html?username=" + encodeURIComponent(result.username || username);
+                        window.location.href = "Profile.html?username=" + encodeURIComponent(result.username || username);
                     };
                 } else {
                     message.textContent = result.message || "Invalid username or password";
