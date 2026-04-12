@@ -1,0 +1,1484 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Your Strong Ministry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --glass-bg: rgba(255,255,255,0.11);
+            --glass-border: rgba(255,255,255,0.18);
+            --text-soft: rgba(255,255,255,0.82);
+            --text-muted: rgba(255,255,255,0.72);
+            --primary-dark: #16324f;
+            --danger: #ff6363;
+            --success: #1fbf75;
+            --warning: #ffb347;
+            --info: #4aa8ff;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            background: linear-gradient(rgba(8,18,38,0.72), rgba(8,18,38,0.88)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            padding: 18px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.22;
+            pointer-events: none;
+            animation: floatGlow 10s ease-in-out infinite;
+            z-index: 0;
+        }
+
+            .bg-glow.one {
+                width: 260px;
+                height: 260px;
+                background: rgba(255,255,255,0.20);
+                top: 4%;
+                left: 4%;
+            }
+
+            .bg-glow.two {
+                width: 320px;
+                height: 320px;
+                background: rgba(173,216,255,0.14);
+                right: 4%;
+                bottom: 4%;
+                animation-delay: 2s;
+            }
+
+        .page {
+            max-width: 1320px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: pageEnter 0.8s ease;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .glass-card::before {
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+                top: -90px;
+                right: -90px;
+                pointer-events: none;
+            }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 0.6px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 11px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, background 0.25s ease;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+            }
+
+        .btn-light {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+
+        .btn-quiz {
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+
+        .btn-save {
+            background: #ffffff;
+            color: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .view {
+            animation: fadeSlide 0.45s ease;
+        }
+
+        .login-wrap {
+            min-height: calc(100vh - 36px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            text-align: center;
+        }
+
+        .login-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 30px;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .login-card h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .login-sub {
+            font-size: 14px;
+            color: var(--text-soft);
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.92);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.16);
+            outline: none;
+            background: rgba(255,255,255,0.94);
+            color: var(--primary-dark);
+            font-size: 14px;
+        }
+
+            input:focus, select:focus {
+                box-shadow: 0 0 0 4px rgba(255,255,255,0.14);
+            }
+
+        .message {
+            margin-top: 14px;
+            min-height: 20px;
+            font-size: 13px;
+            text-align: center;
+            color: #ffd6d6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 18px;
+            animation: fadeSlide 0.45s ease;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1fr 220px 160px;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .table-wrap {
+            overflow: auto;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1180px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        th {
+            background: rgba(255,255,255,0.10);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        td {
+            color: rgba(255,255,255,0.92);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .mini-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform .2s ease, opacity .2s ease;
+        }
+
+            .mini-btn:hover {
+                transform: translateY(-1px);
+            }
+
+        .edit-btn {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal-overlay,
+        .loading-overlay,
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 10, 24, 0.62);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+            .modal-overlay.show,
+            .loading-overlay.show,
+            .confirm-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal-box,
+        .confirm-box {
+            width: 100%;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 22px;
+            transform: translateY(16px) scale(0.97);
+            transition: 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.22);
+        }
+
+        .modal-box {
+            max-width: 980px;
+            max-height: 92vh;
+            overflow: auto;
+        }
+
+        .confirm-box {
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .modal-overlay.show .modal-box,
+        .confirm-overlay.show .confirm-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            border: none;
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .modal-footer,
+        .confirm-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .confirm-icon {
+            width: 68px;
+            height: 68px;
+            border-radius: 18px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,99,99,0.16);
+            font-size: 28px;
+            animation: gentlePulse 1.6s ease-in-out infinite;
+        }
+
+        .confirm-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .confirm-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.7;
+        }
+
+        .loading-box {
+            width: 100%;
+            max-width: 360px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 26px 20px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .ring1, .ring2 {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.16);
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        .ring2 {
+            inset: 9px;
+            animation-direction: reverse;
+            animation-duration: 1.4s;
+            border-top-color: rgba(173,216,255,0.95);
+        }
+
+        .cross {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: gentlePulse 1.6s ease-in-out infinite;
+        }
+
+        .loading-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.7;
+        }
+
+        /* Toast */
+        .toast-wrap {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 12000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: min(92vw, 360px);
+        }
+
+        .toast {
+            background: rgba(12, 21, 42, 0.88);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 18px;
+            padding: 14px 16px;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.28);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transform: translateX(120%);
+            opacity: 0;
+            animation: toastIn .4s ease forwards;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .toast.hide {
+                animation: toastOut .35s ease forwards;
+            }
+
+            .toast::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 3px;
+                width: 100%;
+                background: rgba(255,255,255,0.18);
+            }
+
+            .toast.success::after {
+                background: var(--success);
+            }
+
+            .toast.error::after {
+                background: var(--danger);
+            }
+
+            .toast.warning::after {
+                background: var(--warning);
+            }
+
+            .toast.info::after {
+                background: var(--info);
+            }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .toast-text {
+            font-size: 13px;
+            color: rgba(255,255,255,0.84);
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            padding: 0;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatGlow {
+            0%,100% {
+                transform: translate(0,0) scale(1);
+            }
+
+            50% {
+                transform: translate(14px,-18px) scale(1.05);
+            }
+        }
+
+        @keyframes gentleFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes gentlePulse {
+            0%,100% {
+                transform: scale(1);
+                opacity: 0.84;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(120%) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(120%) scale(0.96);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .brand {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+
+            .login-card h1 {
+                font-size: 26px;
+            }
+
+            .glass-card {
+                padding: 18px 14px;
+                border-radius: 20px;
+            }
+
+            .toast-wrap {
+                top: 14px;
+                right: 14px;
+                left: 14px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow one"></div>
+    <div class="bg-glow two"></div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <div class="page">
+        <div id="loginView" class="login-wrap view hidden">
+            <div class="glass-card login-card">
+                <div class="login-icon">✝</div>
+                <h1>Admin Login</h1>
+                <div class="login-sub">
+                    Login with your admin username and password to manage ministry records.
+                </div>
+
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="adminUsername">Username</label>
+                        <input type="text" id="adminUsername" placeholder="Enter admin username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adminPassword">Password</label>
+                        <input type="password" id="adminPassword" placeholder="Enter admin password" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-light" style="width:100%; margin-top:8px;">Login</button>
+                    <div class="message" id="loginMessage"></div>
+                </form>
+            </div>
+        </div>
+
+        <div id="dashboardView" class="view hidden">
+            <div class="topbar">
+                <div class="brand">Admin Dashboard</div>
+                <div class="top-actions">
+                    <button class="btn btn-quiz" onclick="goToQuizAssign()">Quiz Assign</button>
+                    <button class="btn btn-outline" onclick="loadDashboard()">Refresh</button>
+                    <button class="btn btn-light" onclick="logoutAdmin()">Logout</button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Members</div>
+                    <div class="stat-value" id="totalMembers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Male</div>
+                    <div class="stat-value" id="totalMale">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Female</div>
+                    <div class="stat-value" id="totalFemale">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Married</div>
+                    <div class="stat-value" id="totalMarried">0</div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="toolbar">
+                    <input type="text" id="searchInput" placeholder="Search by name, username, partner ID, phone, church...">
+                    <select id="genderFilter">
+                        <option value="">All Genders</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Transgender">Transgender</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorce">Divorce</option>
+                    </select>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Partner ID</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Phone</th>
+                                <th>Gender</th>
+                                <th>DOB</th>
+                                <th>Email</th>
+                                <th>City</th>
+                                <th>Status</th>
+                                <th>Marriage Date</th>
+                                <th>Church</th>
+                                <th>Pastor</th>
+                                <th>Church Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody">
+                            <tr>
+                                <td colspan="14">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <div class="modal-title">Edit Member</div>
+                <button class="close-btn" onclick="closeEditModal()">Close</button>
+            </div>
+
+            <div class="edit-grid">
+                <div>
+                    <label>Partner ID</label>
+                    <input type="text" id="editPartnerId" readonly>
+                </div>
+
+                <div>
+                    <label>Username</label>
+                    <input type="text" id="editUsername">
+                </div>
+
+                <div>
+                    <label>First Name</label>
+                    <input type="text" id="editFirstName">
+                </div>
+
+                <div>
+                    <label>Last Name</label>
+                    <input type="text" id="editLastName">
+                </div>
+
+                <div>
+                    <label>Phone</label>
+                    <input type="text" id="editPhone">
+                </div>
+
+                <div>
+                    <label>Gender</label>
+                    <select id="editGender">
+                        <option value="">Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Transgender</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Date of Birth</label>
+                    <input type="date" id="editDob">
+                </div>
+
+                <div>
+                    <label>Email</label>
+                    <input type="email" id="editEmail">
+                </div>
+
+                <div>
+                    <label>City</label>
+                    <input type="text" id="editCity">
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select id="editStatus">
+                        <option value="">Select</option>
+                        <option>Single</option>
+                        <option>Married</option>
+                        <option>Divorce</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Marriage Date</label>
+                    <input type="date" id="editMarriageDate">
+                </div>
+
+                <div>
+                    <label>Password</label>
+                    <input type="text" id="editPassword" placeholder="Leave as current or update">
+                </div>
+
+                <div>
+                    <label>Church Name</label>
+                    <input type="text" id="editChurchName">
+                </div>
+
+                <div>
+                    <label>Pastor Name</label>
+                    <input type="text" id="editPastorName">
+                </div>
+
+                <div class="full">
+                    <label>Church Location</label>
+                    <input type="text" id="editChurchLocation">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                <button class="btn btn-save" onclick="saveMember()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="loading-spinner">
+                <div class="ring1"></div>
+                <div class="ring2"></div>
+                <div class="cross">✝</div>
+            </div>
+            <div class="loading-title">Please Wait</div>
+            <div class="loading-text" id="loadingText">Loading dashboard data...</div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete -->
+    <div class="confirm-overlay" id="confirmOverlay">
+        <div class="confirm-box">
+            <div class="confirm-icon">🗑</div>
+            <div class="confirm-title">Delete Member?</div>
+            <div class="confirm-text" id="confirmText">
+                Are you sure you want to delete this member?
+            </div>
+            <div class="confirm-actions">
+                <button class="btn btn-outline" id="confirmCancelBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmOkBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiYh2dsdNDNN8S44KcfnnNMe-FRJVMO0xAmcvsCWpRENRjlgKcE64QyNo00QDwWujUbQ/exec";
+
+        let allMembers = [];
+        let adminToken = sessionStorage.getItem("adminToken") || "";
+        let currentEditPartnerId = "";
+
+        const loginView = document.getElementById("loginView");
+        const dashboardView = document.getElementById("dashboardView");
+        const membersTableBody = document.getElementById("membersTableBody");
+        const loginMessage = document.getElementById("loginMessage");
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const loadingText = document.getElementById("loadingText");
+
+        const searchInput = document.getElementById("searchInput");
+        const genderFilter = document.getElementById("genderFilter");
+        const statusFilter = document.getElementById("statusFilter");
+        const editModal = document.getElementById("editModal");
+        const toastWrap = document.getElementById("toastWrap");
+
+        const confirmOverlay = document.getElementById("confirmOverlay");
+        const confirmText = document.getElementById("confirmText");
+        const confirmOkBtn = document.getElementById("confirmOkBtn");
+        const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+
+        function goToQuizAssign() {
+            if (!adminToken) return;
+            window.location.href = "admin-quiz.html?token=" + encodeURIComponent(adminToken);
+        }
+
+        function showLoading(text = "Please wait...") {
+            loadingText.textContent = text;
+            loadingOverlay.classList.add("show");
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove("show");
+        }
+
+        function showLoginView() {
+            dashboardView.classList.add("hidden");
+            loginView.classList.remove("hidden");
+            loginView.classList.add("view");
+        }
+
+        function showDashboardView() {
+            loginView.classList.add("hidden");
+            dashboardView.classList.remove("hidden");
+            dashboardView.classList.add("view");
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem("adminToken");
+            adminToken = "";
+            allMembers = [];
+            renderStats([]);
+            renderTable([]);
+            showLoginView();
+            showToast("Logged out", "You have been logged out successfully.", "info");
+        }
+
+        function showToast(title, message = "", type = "info", duration = 3200) {
+            const icons = {
+                success: "✓",
+                error: "✕",
+                warning: "!",
+                info: "i"
+            };
+
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || "i"}</div>
+                <div class="toast-body">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-text">${message}</div>
+                </div>
+                <button class="toast-close" aria-label="Close">&times;</button>
+            `;
+
+            const closeBtn = toast.querySelector(".toast-close");
+            closeBtn.addEventListener("click", () => removeToast(toast));
+
+            toastWrap.appendChild(toast);
+
+            const timer = setTimeout(() => removeToast(toast), duration);
+            toast.dataset.timer = timer;
+        }
+
+        function removeToast(toast) {
+            if (!toast) return;
+            clearTimeout(Number(toast.dataset.timer));
+            toast.classList.add("hide");
+            setTimeout(() => toast.remove(), 350);
+        }
+
+        function showConfirm(message) {
+            return new Promise(resolve => {
+                confirmText.textContent = message;
+                confirmOverlay.classList.add("show");
+
+                const onOk = () => {
+                    cleanup();
+                    resolve(true);
+                };
+
+                const onCancel = () => {
+                    cleanup();
+                    resolve(false);
+                };
+
+                const onOverlay = (e) => {
+                    if (e.target === confirmOverlay) {
+                        cleanup();
+                        resolve(false);
+                    }
+                };
+
+                const cleanup = () => {
+                    confirmOverlay.classList.remove("show");
+                    confirmOkBtn.removeEventListener("click", onOk);
+                    confirmCancelBtn.removeEventListener("click", onCancel);
+                    confirmOverlay.removeEventListener("click", onOverlay);
+                };
+
+                confirmOkBtn.addEventListener("click", onOk);
+                confirmCancelBtn.addEventListener("click", onCancel);
+                confirmOverlay.addEventListener("click", onOverlay);
+            });
+        }
+
+        function normalizeDate(value) {
+            if (!value) return "";
+            const d = new Date(value);
+            if (!isNaN(d.getTime())) {
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, "0");
+                const day = String(d.getDate()).padStart(2, "0");
+                return `${year}-${month}-${day}`;
+            }
+            const raw = String(value).trim();
+            const match = raw.match(/(\d{4})-(\d{2})-(\d{2})/);
+            return match ? `${match[1]}-${match[2]}-${match[3]}` : "";
+        }
+
+        function displayDate(value) {
+            if (!value) return "-";
+            const d = new Date(value);
+            if (!isNaN(d.getTime())) {
+                const day = String(d.getDate()).padStart(2, "0");
+                const month = String(d.getMonth() + 1).padStart(2, "0");
+                const year = d.getFullYear();
+                return `${day}-${month}-${year}`;
+            }
+            return String(value);
+        }
+
+        async function apiCall(payload) {
+            const res = await fetch(SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            });
+
+            const text = await res.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                throw new Error("Invalid server response");
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        document.getElementById("adminLoginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById("adminUsername").value.trim();
+            const password = document.getElementById("adminPassword").value.trim();
+
+            loginMessage.textContent = "";
+
+            if (!username || !password) {
+                loginMessage.textContent = "Please enter username and password.";
+                showToast("Missing fields", "Please enter username and password.", "warning");
+                return;
+            }
+
+            showLoading("Checking admin login...");
+
+            try {
+                const result = await apiCall({
+                    action: "adminLogin",
+                    username,
+                    password
+                });
+
+                if (result.success && result.token) {
+                    adminToken = result.token;
+                    sessionStorage.setItem("adminToken", adminToken);
+                    showDashboardView();
+                    showToast("Login successful", "Welcome back to your admin dashboard.", "success");
+                    await loadDashboard(false);
+                } else {
+                    loginMessage.textContent = result.message || "Invalid admin login";
+                    showToast("Login failed", result.message || "Invalid admin login.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                loginMessage.textContent = "Server connection failed.";
+                showToast("Connection error", "Unable to reach the server.", "error");
+            } finally {
+                hideLoading();
+            }
+        });
+
+        async function loadDashboard(showLoader = true) {
+            if (!adminToken) {
+                showLoginView();
+                return;
+            }
+
+            if (showLoader) {
+                showLoading("Loading dashboard data...");
+            }
+
+            try {
+                const result = await apiCall({
+                    action: "adminGetAllUsers",
+                    token: adminToken
+                });
+
+                if (!result.success) {
+                    if (result.message === "Unauthorized") {
+                        sessionStorage.removeItem("adminToken");
+                        adminToken = "";
+                        showLoginView();
+                                                showToast("Session expired", "Please login again.", "warning");
+                        return;
+                    }
+
+                    showToast("Error", result.message || "Unable to load dashboard.", "error");
+                    return;
+                }
+
+                allMembers = Array.isArray(result.data) ? result.data : [];
+                renderStats(allMembers);
+                renderTable(allMembers);
+                applyFiltersToCurrentView();
+            } catch (error) {
+                console.error(error);
+                showToast("Connection error", "Unable to load dashboard data.", "error");
+            } finally {
+                if (showLoader) hideLoading();
+            }
+        }
+
+        function renderStats(data) {
+            document.getElementById("totalMembers").textContent = data.length;
+            document.getElementById("totalMale").textContent = data.filter(x => (x.gender || "").toLowerCase() === "male").length;
+            document.getElementById("totalFemale").textContent = data.filter(x => (x.gender || "").toLowerCase() === "female").length;
+            document.getElementById("totalMarried").textContent = data.filter(x => (x.status || "").toLowerCase() === "married").length;
+        }
+
+        function renderTable(data) {
+            if (!data.length) {
+                membersTableBody.innerHTML = `<tr><td colspan="14">No records found.</td></tr>`;
+                return;
+            }
+
+            membersTableBody.innerHTML = data.map(member => `
+                <tr>
+                    <td>${escapeHtml(member.partnerId || "-")}</td>
+                    <td>${escapeHtml((member.firstName || "") + " " + (member.lastName || ""))}</td>
+                    <td>${escapeHtml(member.username || "-")}</td>
+                    <td>${escapeHtml(member.phone || "-")}</td>
+                    <td>${escapeHtml(member.gender || "-")}</td>
+                    <td>${escapeHtml(displayDate(member.dob))}</td>
+                    <td>${escapeHtml(member.email || "-")}</td>
+                    <td>${escapeHtml(member.city || "-")}</td>
+                    <td>${escapeHtml(member.status || "-")}</td>
+                    <td>${escapeHtml(displayDate(member.marriageDate))}</td>
+                    <td>${escapeHtml(member.churchName || "-")}</td>
+                    <td>${escapeHtml(member.pastorName || "-")}</td>
+                    <td>${escapeHtml(member.churchLocation || "-")}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="mini-btn edit-btn" onclick="openEditModal('${String(member.partnerId || "").replace(/'/g, "\\'")}')">Edit</button>
+                            <button class="mini-btn delete-btn" onclick="deleteMember('${String(member.partnerId || "").replace(/'/g, "\\'")}')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
+        }
+
+        function applyFilters() {
+            const q = searchInput.value.trim().toLowerCase();
+            const gender = genderFilter.value.trim().toLowerCase();
+            const status = statusFilter.value.trim().toLowerCase();
+
+            const filtered = allMembers.filter(member => {
+                const text = `
+                    ${member.partnerId || ""}
+                    ${member.firstName || ""}
+                    ${member.lastName || ""}
+                    ${member.username || ""}
+                    ${member.phone || ""}
+                    ${member.email || ""}
+                    ${member.city || ""}
+                    ${member.churchName || ""}
+                    ${member.pastorName || ""}
+                    ${member.churchLocation || ""}
+                `.toLowerCase();
+
+                const matchSearch = !q || text.includes(q);
+                const matchGender = !gender || (member.gender || "").toLowerCase() === gender;
+                const matchStatus = !status || (member.status || "").toLowerCase() === status;
+
+                return matchSearch && matchGender && matchStatus;
+            });
+
+            renderStats(filtered);
+            renderTable(filtered);
+        }
+
+        function applyFiltersToCurrentView() {
+            if (searchInput.value || genderFilter.value || statusFilter.value) {
+                applyFilters();
+            } else {
+                renderStats(allMembers);
+                renderTable(allMembers);
+            }
+        }
+
+        searchInput.addEventListener("input", applyFilters);
+        genderFilter.addEventListener("change", applyFilters);
+        statusFilter.addEventListener("change", applyFilters);
+
+        function openEditModal(partnerId) {
+            const member = allMembers.find(x => String(x.partnerId) === String(partnerId));
+            if (!member) {
+                showToast("Not found", "Member record not found.", "warning");
+                return;
+            }
+
+            currentEditPartnerId = partnerId;
+
+            document.getElementById("editPartnerId").value = member.partnerId || "";
+            document.getElementById("editUsername").value = member.username || "";
+            document.getElementById("editFirstName").value = member.firstName || "";
+            document.getElementById("editLastName").value = member.lastName || "";
+            document.getElementById("editPhone").value = member.phone || "";
+            document.getElementById("editGender").value = member.gender || "";
+            document.getElementById("editDob").value = normalizeDate(member.dob);
+            document.getElementById("editEmail").value = member.email || "";
+            document.getElementById("editCity").value = member.city || "";
+            document.getElementById("editStatus").value = member.status || "";
+            document.getElementById("editMarriageDate").value = normalizeDate(member.marriageDate);
+            document.getElementById("editPassword").value = member.password || "";
+            document.getElementById("editChurchName").value = member.churchName || "";
+            document.getElementById("editPastorName").value = member.pastorName || "";
+            document.getElementById("editChurchLocation").value = member.churchLocation || "";
+
+            editModal.classList.add("show");
+        }
+
+        function closeEditModal() {
+            editModal.classList.remove("show");
+        }
+
+        async function saveMember() {
+            if (!adminToken) {
+                showToast("Unauthorized", "Please login again.", "warning");
+                showLoginView();
+                return;
+            }
+
+            const payload = {
+                action: "adminUpdateUser",
+                token: adminToken,
+                partnerId: currentEditPartnerId,
+                username: document.getElementById("editUsername").value.trim(),
+                firstName: document.getElementById("editFirstName").value.trim(),
+                lastName: document.getElementById("editLastName").value.trim(),
+                phone: document.getElementById("editPhone").value.trim(),
+                gender: document.getElementById("editGender").value,
+                dob: document.getElementById("editDob").value,
+                email: document.getElementById("editEmail").value.trim(),
+                city: document.getElementById("editCity").value.trim(),
+                status: document.getElementById("editStatus").value,
+                marriageDate: document.getElementById("editMarriageDate").value,
+                password: document.getElementById("editPassword").value.trim(),
+                churchName: document.getElementById("editChurchName").value.trim(),
+                pastorName: document.getElementById("editPastorName").value.trim(),
+                churchLocation: document.getElementById("editChurchLocation").value.trim()
+            };
+
+            showLoading("Saving member changes...");
+
+            try {
+                const result = await apiCall(payload);
+
+                if (result.success) {
+                    closeEditModal();
+                    await loadDashboard(false);
+                    showToast("Saved", "Member updated successfully.", "success");
+                } else {
+                    if (result.message === "Unauthorized") {
+                        sessionStorage.removeItem("adminToken");
+                        adminToken = "";
+                        showLoginView();
+                        showToast("Session expired", "Please login again.", "warning");
+                        return;
+                    }
+
+                    showToast("Update failed", result.message || "Unable to save changes.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Connection error", "Server connection failed.", "error");
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function deleteMember(partnerId) {
+            const ok = await showConfirm("Are you sure you want to delete this member?");
+            if (!ok) return;
+
+            showLoading("Deleting member...");
+
+            try {
+                const result = await apiCall({
+                    action: "adminDeleteUser",
+                    token: adminToken,
+                    partnerId
+                });
+
+                if (result.success) {
+                    await loadDashboard(false);
+                    showToast("Deleted", "Member deleted successfully.", "success");
+                } else {
+                    if (result.message === "Unauthorized") {
+                        sessionStorage.removeItem("adminToken");
+                        adminToken = "";
+                        showLoginView();
+                        showToast("Session expired", "Please login again.", "warning");
+                        return;
+                    }
+
+                    showToast("Delete failed", result.message || "Unable to delete member.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Connection error", "Server connection failed.", "error");
+            } finally {
+                hideLoading();
+            }
+        }
+
+        editModal.addEventListener("click", function (e) {
+            if (e.target === editModal) {
+                closeEditModal();
+            }
+        });
+
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closeEditModal();
+                confirmOverlay.classList.remove("show");
+            }
+        });
+
+        async function initApp() {
+            if (adminToken) {
+                showDashboardView();
+                showLoading("Restoring session...");
+                await loadDashboard(false);
+                hideLoading();
+            } else {
+                showLoginView();
+            }
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
