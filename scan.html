@@ -1,0 +1,434 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Arrival Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 24px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #0d6efd;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        #scanBtn {
+            background: #0d6efd;
+            color: #fff;
+        }
+
+        #stopBtn {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        #scanAgainBtn {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        #arrivedBtn {
+            background: #198754;
+            color: #fff;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: none;
+        }
+
+        .status {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+            .status.info {
+                display: block;
+                background: #e7f1ff;
+                color: #084298;
+            }
+
+            .status.success {
+                display: block;
+                background: #d1e7dd;
+                color: #0f5132;
+            }
+
+            .status.error {
+                display: block;
+                background: #f8d7da;
+                color: #842029;
+            }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f8fafc;
+            border: 1px solid #e4e7eb;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .raw-box {
+            margin-top: 16px;
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Event Arrival Scanner</h1>
+            <p>Scan ticket QR and mark attendee as arrived</p>
+        </div>
+
+        <div class="content">
+            <div class="button-group">
+                <button id="scanBtn">Scan QR</button>
+                <button id="stopBtn">Stop Scanner</button>
+                <button id="scanAgainBtn">Scan Again</button>
+                <button id="arrivedBtn">Arrived</button>
+            </div>
+
+            <div id="status" class="status"></div>
+
+            <div id="reader"></div>
+
+            <div class="grid">
+                <div class="card"><div class="label">Ticket ID</div><div class="value" id="ticketId">-</div></div>
+                <div class="card"><div class="label">Registered At</div><div class="value" id="registeredAt">-</div></div>
+                <div class="card"><div class="label">First Name</div><div class="value" id="firstName">-</div></div>
+                <div class="card"><div class="label">Last Name</div><div class="value" id="lastName">-</div></div>
+                <div class="card"><div class="label">Date of Birth</div><div class="value" id="dob">-</div></div>
+                <div class="card"><div class="label">Age</div><div class="value" id="age">-</div></div>
+                <div class="card"><div class="label">Mobile Number</div><div class="value" id="mobile">-</div></div>
+                <div class="card"><div class="label">Member Type</div><div class="value" id="memberType">-</div></div>
+                <div class="card"><div class="label">Partner ID</div><div class="value" id="partnerId">-</div></div>
+                <div class="card"><div class="label">Referred By</div><div class="value" id="referredBy">-</div></div>
+                <div class="card"><div class="label">Email</div><div class="value" id="email">-</div></div>
+                <div class="card"><div class="label">Event Name</div><div class="value" id="eventName">-</div></div>
+                <div class="card"><div class="label">Event Date</div><div class="value" id="eventDate">-</div></div>
+                <div class="card"><div class="label">Event Location</div><div class="value" id="eventLocation">-</div></div>
+                <div class="card"><div class="label">Arrival Status</div><div class="value" id="arrivalStatus">Not Arrived</div></div>
+            </div>
+
+            <div class="raw-box">
+                <div class="label">Scanned QR Content</div>
+                <pre id="rawData">No QR scanned</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const API_BASE_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL";
+
+    let html5QrCode = null;
+    let scannerRunning = false;
+    let currentTicket = null;
+    let currentTicketId = "";
+
+    const statusBox = document.getElementById("status");
+    const reader = document.getElementById("reader");
+
+    const els = {
+      ticketId: document.getElementById("ticketId"),
+      registeredAt: document.getElementById("registeredAt"),
+      firstName: document.getElementById("firstName"),
+      lastName: document.getElementById("lastName"),
+      dob: document.getElementById("dob"),
+      age: document.getElementById("age"),
+      mobile: document.getElementById("mobile"),
+      memberType: document.getElementById("memberType"),
+      partnerId: document.getElementById("partnerId"),
+      referredBy: document.getElementById("referredBy"),
+      email: document.getElementById("email"),
+      eventName: document.getElementById("eventName"),
+      eventDate: document.getElementById("eventDate"),
+      eventLocation: document.getElementById("eventLocation"),
+      arrivalStatus: document.getElementById("arrivalStatus"),
+      rawData: document.getElementById("rawData")
+    };
+
+    function showStatus(message, type = "info") {
+      statusBox.className = `status ${type}`;
+      statusBox.textContent = message;
+    }
+
+    function clearStatus() {
+      statusBox.className = "status";
+      statusBox.textContent = "";
+    }
+
+    function resetTicketView() {
+      Object.keys(els).forEach(key => {
+        if (key === "arrivalStatus") {
+          els[key].textContent = "Not Arrived";
+        } else if (key === "rawData") {
+          els[key].textContent = "No QR scanned";
+        } else {
+          els[key].textContent = "-";
+        }
+      });
+
+      currentTicket = null;
+      currentTicketId = "";
+    }
+
+    function fillTicket(ticket, rawText) {
+      currentTicket = ticket;
+      currentTicketId = ticket.ticketId || "";
+
+      els.ticketId.textContent = ticket.ticketId || "-";
+      els.registeredAt.textContent = ticket.registeredAt || "-";
+      els.firstName.textContent = ticket.firstName || "-";
+      els.lastName.textContent = ticket.lastName || "-";
+      els.dob.textContent = ticket.dob || "-";
+      els.age.textContent = ticket.age || "-";
+      els.mobile.textContent = ticket.mobile || "-";
+      els.memberType.textContent = ticket.memberType || "-";
+      els.partnerId.textContent = ticket.partnerId || "-";
+      els.referredBy.textContent = ticket.referredBy || "-";
+      els.email.textContent = ticket.email || "-";
+      els.eventName.textContent = ticket.eventName || "-";
+      els.eventDate.textContent = ticket.eventDate || "-";
+      els.eventLocation.textContent = ticket.eventLocation || "-";
+      els.arrivalStatus.textContent = "Ready to Mark Arrived";
+      els.rawData.textContent = rawText || "-";
+    }
+
+    function extractTicketId(scannedText) {
+      const text = String(scannedText || "").trim();
+
+      if (!text) return "";
+
+      if (text.startsWith("http://") || text.startsWith("https://")) {
+        try {
+          const url = new URL(text);
+          return (url.searchParams.get("ticketId") || "").trim();
+        } catch (e) {
+          return "";
+        }
+      }
+
+      return text;
+    }
+
+    async function fetchTicketDetails(ticketId, rawText) {
+      showStatus("Fetching ticket details...", "info");
+
+      try {
+        const url = `${API_BASE_URL}?action=getTicket&ticketId=${encodeURIComponent(ticketId)}`;
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (!result.success || !result.ticket) {
+          showStatus(result.message || "Ticket not found", "error");
+          return;
+        }
+
+        fillTicket(result.ticket, rawText);
+        showStatus("Ticket found successfully", "success");
+      } catch (error) {
+        showStatus("Error fetching ticket: " + error.message, "error");
+      }
+    }
+
+    async function markArrived() {
+      if (!currentTicketId) {
+        showStatus("Please scan a ticket first", "error");
+        return;
+      }
+
+      showStatus("Marking arrival...", "info");
+
+      try {
+        const response = await fetch(API_BASE_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            action: "markArrived",
+            ticketId: currentTicketId
+          })
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          showStatus(result.message || "Unable to mark arrival", "error");
+          return;
+        }
+
+        if (result.alreadyArrived) {
+          els.arrivalStatus.textContent = "Already Arrived";
+          showStatus(result.message || "Already arrived", "error");
+        } else {
+          els.arrivalStatus.textContent = "Arrived";
+          showStatus(result.message || "Marked as arrived", "success");
+        }
+      } catch (error) {
+        showStatus("Error marking arrival: " + error.message, "error");
+      }
+    }
+
+    async function startScanner() {
+      if (scannerRunning) {
+        showStatus("Scanner is already running", "info");
+        return;
+      }
+
+      try {
+        reader.style.display = "block";
+        html5QrCode = new Html5Qrcode("reader");
+
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          async (decodedText) => {
+            const ticketId = extractTicketId(decodedText);
+            els.rawData.textContent = decodedText;
+
+            if (!ticketId) {
+              showStatus("Could not read ticket ID from QR", "error");
+              return;
+            }
+
+            await stopScanner();
+            await fetchTicketDetails(ticketId, decodedText);
+          },
+          () => {}
+        );
+
+        scannerRunning = true;
+        showStatus("Scanner started. Point camera at ticket QR.", "info");
+      } catch (error) {
+        showStatus("Unable to start scanner: " + error.message, "error");
+      }
+    }
+
+    async function stopScanner() {
+      if (!html5QrCode || !scannerRunning) {
+        reader.style.display = "none";
+        return;
+      }
+
+      try {
+        await html5QrCode.stop();
+        await html5QrCode.clear();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        scannerRunning = false;
+        reader.style.display = "none";
+      }
+    }
+
+    async function scanAgain() {
+      resetTicketView();
+      clearStatus();
+      await stopScanner();
+      await startScanner();
+    }
+
+    document.getElementById("scanBtn").addEventListener("click", startScanner);
+    document.getElementById("stopBtn").addEventListener("click", stopScanner);
+    document.getElementById("scanAgainBtn").addEventListener("click", scanAgain);
+    document.getElementById("arrivedBtn").addEventListener("click", markArrived);
+
+    resetTicketView();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const ticketFromUrl = (urlParams.get("ticketId") || "").trim();
+    if (ticketFromUrl) {
+      fetchTicketDetails(ticketFromUrl, window.location.href);
+    }
+    </script>
+</body>
+</html>
