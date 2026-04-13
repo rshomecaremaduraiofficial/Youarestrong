@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -511,7 +511,6 @@
             line-height: 1.7;
         }
 
-        /* Toast */
         .toast-wrap {
             position: fixed;
             top: 20px;
@@ -786,6 +785,8 @@
                 <div class="brand">Admin Dashboard</div>
                 <div class="top-actions">
                     <button class="btn btn-quiz" onclick="goToQuizAssign()">Quiz Assign</button>
+                    <button class="btn btn-outline" onclick="goToBookedMembers()">Booked Members</button>
+                    <button class="btn btn-outline" onclick="goToArrivedMembers()">Arrived Members</button>
                     <button class="btn btn-outline" onclick="loadDashboard()">Refresh</button>
                     <button class="btn btn-light" onclick="logoutAdmin()">Logout</button>
                 </div>
@@ -858,7 +859,6 @@
         </div>
     </div>
 
-    <!-- Edit Modal -->
     <div class="modal-overlay" id="editModal">
         <div class="modal-box">
             <div class="modal-head">
@@ -960,7 +960,6 @@
         </div>
     </div>
 
-    <!-- Loading -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-box">
             <div class="loading-spinner">
@@ -973,7 +972,6 @@
         </div>
     </div>
 
-    <!-- Confirm Delete -->
     <div class="confirm-overlay" id="confirmOverlay">
         <div class="confirm-box">
             <div class="confirm-icon">🗑</div>
@@ -1016,6 +1014,16 @@
         function goToQuizAssign() {
             if (!adminToken) return;
             window.location.href = "admin-quiz.html?token=" + encodeURIComponent(adminToken);
+        }
+
+        function goToBookedMembers() {
+            if (!adminToken) return;
+            window.location.href = "booked-members.html?token=" + encodeURIComponent(adminToken);
+        }
+
+        function goToArrivedMembers() {
+            if (!adminToken) return;
+            window.location.href = "arrived-members.html?token=" + encodeURIComponent(adminToken);
         }
 
         function showLoading(text = "Please wait...") {
@@ -1231,7 +1239,7 @@
                         sessionStorage.removeItem("adminToken");
                         adminToken = "";
                         showLoginView();
-                                                showToast("Session expired", "Please login again.", "warning");
+                        showToast("Session expired", "Please login again.", "warning");
                         return;
                     }
 
