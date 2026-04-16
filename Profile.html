@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -673,14 +673,14 @@
 
     <script>
         const PROFILE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiYh2dsdNDNN8S44KcfnnNMe-FRJVMO0xAmcvsCWpRENRjlgKcE64QyNo00QDwWujUbQ/exec";
-        const QUIZ_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCNL-3svzyaA5oQYa36jfJlTwoorHB36DDJmeG2awiwhclEPElAE2iW-kHagBfKj_V-g/exechttps://script.google.com/macros/s/AKfycbxNlg4GGLID5edVkDXnumoxqJ03JucVQnSUcmkGnvsIaZ4OIYZkOjZffSyVwG5reuQToA/exec";
+        const QUIZ_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCNL-3svzyaA5oQYa36jfJlTwoorHB36DDJmeG2awiwhclEPElAE2iW-kHagBfKj_V-g/exec";
 
-        const username = new URLSearchParams(window.location.search).get("username") || "";
+        const username = new URLSearchParams(window.location.search).get("username") || localStorage.getItem("loggedInUser") || "";
         const welcomePopup = document.getElementById("welcomePopup");
         const welcomeTitle = document.getElementById("welcomeTitle");
         const welcomeText = document.getElementById("welcomeText");
 
-        let lastQuizId = "";
+        let lastQuizId = localStorage.getItem("lastQuizId") || "";
 
         function showWelcome(name) {
             welcomeTitle.textContent = "Welcome, " + name + " 👋";
@@ -706,28 +706,48 @@
             return raw;
         }
 
+        function toBool(value) {
+            if (typeof value === "boolean") return value;
+            if (typeof value === "number") return value === 1;
+            if (typeof value === "string") {
+                const v = value.trim().toLowerCase();
+                return ["true", "yes", "1", "done", "completed", "complete"].includes(v);
+            }
+            return false;
+        }
+
         async function profileApi(payload) {
             const res = await fetch(PROFILE_SCRIPT_URL, {
                 method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
                 body: JSON.stringify(payload)
             });
-            return await res.json();
+
+            const text = await res.text();
+            return JSON.parse(text);
         }
 
         async function quizApi(payload) {
             const res = await fetch(QUIZ_SCRIPT_URL, {
                 method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
                 body: JSON.stringify(payload)
             });
-            return await res.json();
+
+            const text = await res.text();
+            return JSON.parse(text);
         }
 
         function updateQuizLink() {
             const quizOpenBtn = document.getElementById("quizOpenBtn");
             if (username) {
-                quizOpenBtn.href = "quiz-result.html?username=" + encodeURIComponent(username);
+                quizOpenBtn.href = "quiz.html?username=" + encodeURIComponent(username);
             } else {
-                quizOpenBtn.href = "quiz-result.html";
+                quizOpenBtn.href = "quiz.html";
             }
         }
 
@@ -737,7 +757,10 @@
                 return;
             }
 
-            if (!lastQuizId) {
+            const storedQuizId = localStorage.getItem("lastQuizId") || "";
+            const finalQuizId = lastQuizId || storedQuizId;
+
+            if (!finalQuizId) {
                 alert("Quiz result is not available yet.");
                 return;
             }
@@ -746,7 +769,7 @@
                 "quiz-result.html?username=" +
                 encodeURIComponent(username) +
                 "&quizId=" +
-                encodeURIComponent(lastQuizId);
+                encodeURIComponent(finalQuizId);
         }
 
         async function loadQuizStatus() {
@@ -760,11 +783,13 @@
 
                 if (!activeQuizResult.success || !activeQuizResult.quiz) {
                     document.getElementById("quizStatusText").textContent = "Quiz status: No active quiz";
-                    lastQuizId = "";
                     return;
                 }
 
                 lastQuizId = activeQuizResult.quiz.quizId || "";
+                if (lastQuizId) {
+                    localStorage.setItem("lastQuizId", lastQuizId);
+                }
 
                 const result = await quizApi({
                     action: "getQuizResult",
@@ -772,8 +797,21 @@
                     quizId: lastQuizId
                 });
 
-                if (result.success && result.result && result.result.quizDone) {
-                    document.getElementById("quizStatusText").textContent = "Quiz status: Completed";
+                if (result.success && result.result) {
+                    const isDone =
+                        toBool(result.result.quizDone) ||
+                        toBool(result.result.completed) ||
+                        toBool(result.result.isCompleted) ||
+                        Number(result.result.score || 0) > 0 ||
+                        Number(result.result.total || 0) > 0;
+
+                    if (isDone) {
+                        document.getElementById("quizStatusText").textContent = "Quiz status: Completed";
+                        localStorage.setItem("quizCompleted", "true");
+                    } else {
+                        document.getElementById("quizStatusText").textContent = "Quiz status: Not completed";
+                        localStorage.setItem("quizCompleted", "false");
+                    }
                 } else {
                     document.getElementById("quizStatusText").textContent = "Quiz status: Not completed";
                 }
@@ -809,6 +847,10 @@
 
                     document.getElementById("loadingText").style.display = "none";
                     document.getElementById("profileGrid").style.display = "grid";
+
+                    if (username) {
+                        localStorage.setItem("loggedInUser", username);
+                    }
 
                     setTimeout(() => {
                         showWelcome(firstName || "User");
