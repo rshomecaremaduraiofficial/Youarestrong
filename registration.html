@@ -1,0 +1,1134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Youth Meeting Registration - You Are Strong Ministry</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+    <style>
+        :root {
+            --bg1: #07101f;
+            --bg2: #0d213d;
+            --glass: rgba(255,255,255,0.08);
+            --border: rgba(255,255,255,0.16);
+            --text: #ffffff;
+            --muted: rgba(255,255,255,0.74);
+            --accent: #e8f1ff;
+            --accent-dark: #17324f;
+            --danger: #ffb9b9;
+            --success: #68da93;
+            --shadow: 0 22px 50px rgba(0,0,0,0.28);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: linear-gradient(rgba(8,18,38,0.72), rgba(8,18,38,0.90)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            padding: 24px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatGlow 12s ease-in-out infinite;
+        }
+
+            .glow.one {
+                width: 280px;
+                height: 280px;
+                background: rgba(255,255,255,0.18);
+                top: 2%;
+                left: 3%;
+            }
+
+            .glow.two {
+                width: 340px;
+                height: 340px;
+                background: rgba(126,188,255,0.16);
+                right: 4%;
+                bottom: 5%;
+                animation-delay: 2s;
+            }
+
+        .page {
+            max-width: 980px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: pageEnter 0.8s ease;
+        }
+
+        .hero,
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero {
+            margin-bottom: 20px;
+        }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                width: 280px;
+                height: 280px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.12), transparent 70%);
+                top: -110px;
+                right: -110px;
+                pointer-events: none;
+            }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+            line-height: 1.2;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            animation: fadeUp 0.55s ease both;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.94);
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 52px;
+            padding: 0 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+            transition: 0.25s ease;
+        }
+
+            input::placeholder {
+                color: rgba(255,255,255,0.48);
+            }
+
+            input:focus,
+            select:focus {
+                transform: translateY(-1px);
+                background: rgba(255,255,255,0.12);
+                border-color: rgba(255,255,255,0.28);
+                box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+            }
+
+            input[readonly] {
+                opacity: 0.92;
+                cursor: not-allowed;
+            }
+
+            select option {
+                color: #111;
+            }
+
+        .helper {
+            margin-top: 7px;
+            font-size: 12px;
+            color: rgba(255,255,255,0.62);
+        }
+
+        .actions {
+            margin-top: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .message {
+            min-height: 20px;
+            font-size: 13px;
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        .submit-btn,
+        .ok-btn,
+        .download-btn {
+            border: none;
+            min-width: 180px;
+            height: 52px;
+            padding: 0 24px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ffffff, var(--accent));
+            color: var(--accent-dark);
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+        }
+
+            .submit-btn:hover,
+            .ok-btn:hover,
+            .download-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 18px 32px rgba(0,0,0,0.22);
+            }
+
+            .submit-btn:disabled {
+                opacity: 0.72;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(4,10,20,0.64);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+            .overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .modal {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            animation: modalIn 0.35s ease;
+        }
+
+        .spinner {
+            width: 74px;
+            height: 74px;
+            margin: 0 auto 18px;
+            position: relative;
+        }
+
+        .ring,
+        .ring2 {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.16);
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+        }
+
+        .ring2 {
+            inset: 9px;
+            border-top-color: rgba(173,216,255,0.95);
+            animation-direction: reverse;
+            animation-duration: 1.4s;
+        }
+
+        .center-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            line-height: 1.75;
+            color: rgba(255,255,255,0.86);
+        }
+
+        .success-icon {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            background: rgba(94,211,138,0.18);
+            border: 1px solid rgba(255,255,255,0.16);
+            animation: successPulse 1.6s ease-in-out infinite;
+        }
+
+        .popup-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatGlow {
+            0%,100% {
+                transform: translate(0,0) scale(1);
+            }
+
+            50% {
+                transform: translate(14px,-16px) scale(1.05);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%,100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes successPulse {
+            0%,100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(94,211,138,0.24);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 18px rgba(94,211,138,0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .hero, .card {
+                padding: 18px 14px;
+                border-radius: 22px;
+            }
+
+                .hero h1 {
+                    font-size: 26px;
+                }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
+    <div class="page">
+        <section class="hero">
+            <div class="badge-row">
+                <div class="badge">MEETING REGISTRATION</div>
+            </div>
+            <h1>Youth Meeting Registration</h1>
+            <p>Fill in your details below to complete your youth meeting registration.</p>
+        </section>
+
+        <section class="card">
+            <form id="registrationForm">
+                <div class="grid">
+                    <div class="field">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" placeholder="Enter first name" />
+                    </div>
+
+                    <div class="field">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" placeholder="Enter last name" />
+                    </div>
+
+                    <div class="field">
+                        <label for="dob">Date of Birth *</label>
+                        <input type="date" id="dob" />
+                    </div>
+
+                    <div class="field">
+                        <label for="age">Age *</label>
+                        <input type="text" id="age" readonly placeholder="Auto calculated" />
+                    </div>
+
+                    <div class="field">
+                        <label for="mobile">Mobile Number *</label>
+                        <input type="tel" id="mobile" maxlength="15" placeholder="Enter mobile number" />
+                        <div class="helper">Only numbers are allowed.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="memberType">Member Type *</label>
+                        <select id="memberType">
+                            <option value="">Select member type</option>
+                            <option value="New Member">New Member</option>
+                            <option value="Old Member">Old Member</option>
+                        </select>
+                    </div>
+
+                    <div class="field full hidden" id="partnerField">
+                        <label for="partnerId">Partner ID *</label>
+                        <input type="text" id="partnerId" placeholder="Enter partner ID" />
+                    </div>
+
+                    <div class="field">
+                        <label for="referredBy">Referred By *</label>
+                        <input type="text" id="referredBy" placeholder="Enter referred by name" />
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter email address" />
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <div class="message" id="formMessage"></div>
+                    <button type="submit" class="submit-btn" id="submitBtn">Submit Registration</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Loading Popup -->
+    <div class="overlay" id="loadingOverlay">
+        <div class="modal">
+            <div class="spinner">
+                <div class="ring"></div>
+                <div class="ring2"></div>
+                <div class="center-icon">⏳</div>
+            </div>
+            <div class="modal-title">Submitting...</div>
+            <div class="modal-text">Please wait while we process your registration.</div>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="overlay" id="successOverlay">
+        <div class="modal">
+            <div class="success-icon">✅</div>
+            <div class="modal-title">Registration Successful</div>
+            <div class="modal-text" id="successText">
+                Your event registration has been completed successfully. Download your ticket for you entry
+            </div>
+
+            <div class="popup-actions">
+                <button class="download-btn" id="downloadBtn">Download Ticket</button>
+                <button class="ok-btn" id="okBtn">OK</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyaktKm6VE7iJI4WcWY9VHVceUzXyRSY5LJJyXEhtrAjvwOphQlqft98cZNzo-NV2AQ-A/exec";
+
+
+const MINISTRY_NAME = "YOU ARE STRONG MINISTRY";
+const EVENT_PASS_TITLE = "ENTRY TICKET";
+const CONTACT_1 = "+91 80954 49951";
+const CONTACT_2 = "+91 97426 38179";
+
+const form = document.getElementById("registrationForm");
+const firstName = document.getElementById("firstName");
+const lastName = document.getElementById("lastName");
+const dob = document.getElementById("dob");
+const age = document.getElementById("age");
+const mobile = document.getElementById("mobile");
+const memberType = document.getElementById("memberType");
+const partnerField = document.getElementById("partnerField");
+const partnerId = document.getElementById("partnerId");
+const referredBy = document.getElementById("referredBy");
+const email = document.getElementById("email");
+const formMessage = document.getElementById("formMessage");
+const submitBtn = document.getElementById("submitBtn");
+
+const loadingOverlay = document.getElementById("loadingOverlay");
+const successOverlay = document.getElementById("successOverlay");
+const successText = document.getElementById("successText");
+const okBtn = document.getElementById("okBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+
+let savedTicket = null;
+
+function calculateAge(dateString) {
+  if (!dateString) return "";
+
+  const today = new Date();
+  const birthDate = new Date(dateString);
+
+  let years = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    years--;
+  }
+
+  return years >= 0 ? years : "";
+}
+
+if (dob) {
+  dob.addEventListener("change", () => {
+    age.value = calculateAge(dob.value);
+  });
+}
+
+if (mobile) {
+  mobile.addEventListener("input", () => {
+    mobile.value = mobile.value.replace(/[^0-9]/g, "");
+  });
+}
+
+if (memberType) {
+  memberType.addEventListener("change", () => {
+    if (memberType.value === "Old Member") {
+      partnerField.classList.remove("hidden");
+    } else {
+      partnerField.classList.add("hidden");
+      if (partnerId) partnerId.value = "";
+    }
+  });
+}
+
+function validateForm() {
+  if (!firstName.value.trim()) return "First name is required.";
+  if (!lastName.value.trim()) return "Last name is required.";
+  if (!dob.value) return "Date of birth is required.";
+  if (!age.value) return "Age could not be calculated.";
+  if (!mobile.value.trim()) return "Mobile number is required.";
+  if (mobile.value.trim().length < 7) return "Enter a valid mobile number.";
+  if (!memberType.value) return "Please select member type.";
+  if (!referredBy.value.trim()) return "Referred By is required.";
+
+  if (memberType.value === "Old Member" && !partnerId.value.trim()) {
+    return "Partner ID is required for old members.";
+  }
+
+  return "";
+}
+
+function showLoading(show) {
+  if (!loadingOverlay) return;
+  if (show) loadingOverlay.classList.add("show");
+  else loadingOverlay.classList.remove("show");
+}
+
+function showSuccess(ticket) {
+  if (!successOverlay || !successText) return;
+
+  successText.innerHTML = `
+    Thank you, <strong>${escapeHtml(ticket.firstName)} ${escapeHtml(ticket.lastName)}</strong>.<br><br>
+    Ticket ID: <strong>${escapeHtml(ticket.ticketId)}</strong><br>
+    Event: <strong>${escapeHtml(ticket.eventName)}</strong><br>
+    Date: <strong>${escapeHtml(ticket.eventDate)}</strong><br>
+    Location: <strong>${escapeHtml(ticket.eventLocation)}</strong><br><br>
+    Your entry ticket is ready.
+  `;
+
+  successOverlay.classList.add("show");
+}
+
+function safeText(value) {
+  return String(value || "").trim();
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function formatRegisteredAt(value) {
+  if (!value) return "-";
+  try {
+    return new Date(value).toLocaleString();
+  } catch (e) {
+    return String(value);
+  }
+}
+
+function safeFileName(value) {
+  return String(value || "")
+    .trim()
+    .replace(/[\\/:*?"<>|]+/g, "_")
+    .replace(/\s+/g, "_");
+}
+
+/* NORMAL QR ONLY */
+function buildQrText(ticket) {
+  return safeText(ticket.ticketId);
+}
+
+function generateQrDataUrl(text) {
+  return new Promise((resolve, reject) => {
+    try {
+      const tempDiv = document.createElement("div");
+      tempDiv.style.position = "fixed";
+      tempDiv.style.left = "-9999px";
+      tempDiv.style.top = "-9999px";
+      document.body.appendChild(tempDiv);
+
+      new QRCode(tempDiv, {
+        text: text,
+        width: 260,
+        height: 260,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+
+      setTimeout(() => {
+        try {
+          const img = tempDiv.querySelector("img");
+          const canvas = tempDiv.querySelector("canvas");
+          let dataUrl = "";
+
+          if (img && img.src) {
+            dataUrl = img.src;
+          } else if (canvas) {
+            dataUrl = canvas.toDataURL("image/png");
+          }
+
+          if (tempDiv.parentNode) {
+            document.body.removeChild(tempDiv);
+          }
+
+          if (!dataUrl) {
+            reject(new Error("QR code generation failed"));
+            return;
+          }
+
+          resolve(dataUrl);
+        } catch (err) {
+          if (tempDiv.parentNode) {
+            document.body.removeChild(tempDiv);
+          }
+          reject(err);
+        }
+      }, 500);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+function ticketInfoBox(label, value, full = false) {
+  return `
+    <div style="
+      background:#f7fafc;
+      border:1px solid #e4ecf3;
+      border-radius:16px;
+      padding:14px;
+      ${full ? "grid-column:1 / -1;" : ""}
+    ">
+      <div style="font-size:12px;color:#688094;margin-bottom:6px;font-weight:bold;">
+        ${escapeHtml(label)}
+      </div>
+      <div style="font-size:15px;color:#18324a;word-break:break-word;font-weight:700;line-height:1.45;">
+        ${escapeHtml(value)}
+      </div>
+    </div>
+  `;
+}
+
+async function buildTicketMarkup(ticket, includeLogo = true) {
+  const qrText = buildQrText(ticket);
+  const qrDataUrl = await generateQrDataUrl(qrText);
+
+  const logoHtml = includeLogo
+    ? `<img id="pdfLogoImage" src="${escapeHtml(LOGO_URL)}" alt="Ministry Logo" crossorigin="anonymous" style="width:58px;height:58px;object-fit:contain;" />`
+    : `<div style="width:58px;height:58px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:20px;">YM</div>`;
+
+  return `
+  <div class="ticket-wrap" style="max-width:920px;margin:0 auto;font-family:Arial,sans-serif;color:#13263d;">
+    <div style="text-align:center;margin-bottom:16px;color:#4e6277;font-size:14px;">
+      This ticket was generated after successful registration.
+    </div>
+
+    <div class="ticket-card" style="background:#ffffff;border-radius:28px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,0.12);border:1px solid #dde7f0;">
+      <div style="background:linear-gradient(135deg,#10243d,#1b4a78);color:white;padding:28px;text-align:center;">
+        <div style="width:74px;height:74px;margin:0 auto 14px;border-radius:18px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          ${logoHtml}
+        </div>
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:0.5px;">${escapeHtml(MINISTRY_NAME)}</h1>
+        <h2 style="margin:0 0 10px;font-size:18px;font-weight:700;">${escapeHtml(EVENT_PASS_TITLE)}</h2>
+        <p style="margin:0;opacity:0.92;font-size:15px;">
+          ${escapeHtml(ticket.eventName)} • ${escapeHtml(ticket.eventLocation)} • ${escapeHtml(ticket.eventDate)}
+        </p>
+      </div>
+
+      <div id="pdfTicketBody" style="display:grid;grid-template-columns:1.3fr 0.9fr;gap:24px;padding:28px;">
+        <div>
+          <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#5d7388;margin-bottom:12px;font-weight:bold;">
+            Attendee Details
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            ${ticketInfoBox("First Name", ticket.firstName)}
+            ${ticketInfoBox("Last Name", ticket.lastName)}
+            ${ticketInfoBox("Date of Birth", ticket.dob)}
+            ${ticketInfoBox("Age", ticket.age)}
+            ${ticketInfoBox("Mobile", ticket.mobile)}
+            ${ticketInfoBox("Member Type", ticket.memberType)}
+            ${ticketInfoBox("Partner ID", ticket.partnerId || "N/A")}
+            ${ticketInfoBox("Referred By", ticket.referredBy)}
+            ${ticketInfoBox("Email", ticket.email || "N/A", true)}
+            ${ticketInfoBox("Ticket ID", ticket.ticketId, true)}
+            ${ticketInfoBox("Registered At", formatRegisteredAt(ticket.registeredAt), true)}
+          </div>
+        </div>
+
+        <div style="background:#f7fafc;border:1px solid #e4ecf3;border-radius:20px;padding:18px;text-align:center;height:100%;">
+          <div style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#5d7388;margin-bottom:12px;font-weight:bold;">
+            Scan QR Code
+          </div>
+
+          <img id="pdfQrImage" src="${qrDataUrl}" alt="QR Code" style="width:100%;max-width:260px;border-radius:12px;background:white;padding:10px;border:1px solid #dce6ef;" />
+
+          <div style="margin-top:14px;font-size:18px;font-weight:800;color:#18324a;word-break:break-word;">
+            ${escapeHtml(ticket.ticketId)}
+          </div>
+
+          <div style="margin-top:16px;background:#ffffff;border:1px solid #dce6ef;border-radius:14px;padding:14px;text-align:left;">
+            <div style="font-size:12px;color:#688094;font-weight:bold;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.7px;">
+              For any doubts
+            </div>
+            <div style="font-size:14px;color:#18324a;font-weight:700;line-height:1.7;">
+              ${escapeHtml(CONTACT_1)}<br>
+              ${escapeHtml(CONTACT_2)}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:0 28px 28px;color:#6a8095;font-size:13px;line-height:1.7;text-align:center;">
+        Show this QR code at the entry gate for scanning.
+      </div>
+    </div>
+  </div>`;
+}
+
+async function openTicketLayout(ticket) {
+  const markup = await buildTicketMarkup(ticket, true);
+
+  const win = window.open("", "_blank");
+  if (!win) {
+    alert("Please allow popups to open the ticket.");
+    return;
+  }
+
+  win.document.open();
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Event Ticket - ${escapeHtml(ticket.ticketId)}</title>
+      <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: #eef3f8;
+          padding: 24px;
+        }
+        .print-btn {
+          display: inline-block;
+          margin: 20px auto 0;
+          border: none;
+          background: linear-gradient(135deg, #10243d, #1b4a78);
+          color: #fff;
+          padding: 14px 22px;
+          border-radius: 14px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .print-wrap {
+          text-align: center;
+        }
+        @media print {
+          body { background: #fff; padding: 0; }
+          .print-wrap { display: none; }
+        }
+        @media (max-width: 760px) {
+          #pdfTicketBody {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      ${markup}
+      <div class="print-wrap">
+        <button class="print-btn" onclick="window.print()">Print Ticket</button>
+      </div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+}
+
+function waitForImageLoad(img) {
+  return new Promise((resolve) => {
+    if (!img) {
+      resolve(false);
+      return;
+    }
+
+    if (img.complete && img.naturalWidth > 0) {
+      resolve(true);
+      return;
+    }
+
+    let done = false;
+
+    const finish = (ok) => {
+      if (done) return;
+      done = true;
+      resolve(ok);
+    };
+
+    img.onload = () => finish(true);
+    img.onerror = () => finish(false);
+
+    setTimeout(() => finish(false), 3000);
+  });
+}
+
+async function tryRenderPdf(markup) {
+  const tempWrapper = document.createElement("div");
+  tempWrapper.style.position = "fixed";
+  tempWrapper.style.left = "-10000px";
+  tempWrapper.style.top = "0";
+  tempWrapper.style.width = "920px";
+  tempWrapper.style.padding = "24px";
+  tempWrapper.style.background = "#eef3f8";
+  tempWrapper.style.zIndex = "-1";
+  tempWrapper.innerHTML = markup;
+  document.body.appendChild(tempWrapper);
+
+  try {
+    const logoImg = tempWrapper.querySelector("#pdfLogoImage");
+    const qrImg = tempWrapper.querySelector("#pdfQrImage");
+    const ticketElement = tempWrapper.querySelector(".ticket-wrap");
+    const ticketBody = tempWrapper.querySelector("#pdfTicketBody");
+
+    if (window.innerWidth < 760 && ticketBody) {
+      ticketBody.style.gridTemplateColumns = "1fr";
+    }
+
+    await waitForImageLoad(logoImg);
+    await waitForImageLoad(qrImg);
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    const canvas = await html2canvas(ticketElement, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#eef3f8",
+      logging: false
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+    if (tempWrapper.parentNode) {
+      document.body.removeChild(tempWrapper);
+    }
+
+    return imgData;
+  } catch (error) {
+    if (tempWrapper.parentNode) {
+      document.body.removeChild(tempWrapper);
+    }
+    throw error;
+  }
+}
+
+async function downloadTicketPdf(ticket) {
+  let imgData = null;
+
+  try {
+    const markupWithLogo = await buildTicketMarkup(ticket, true);
+    imgData = await tryRenderPdf(markupWithLogo);
+  } catch (error) {
+    const markupWithoutLogo = await buildTicketMarkup(ticket, false);
+    imgData = await tryRenderPdf(markupWithoutLogo);
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 8;
+
+  const maxWidth = pageWidth - margin * 2;
+  const maxHeight = pageHeight - margin * 2;
+
+  const img = new Image();
+  img.src = imgData;
+
+  await new Promise((resolve) => {
+    if (img.complete) {
+      resolve();
+      return;
+    }
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+  });
+
+  let imgWidth = maxWidth;
+  let imgHeight = (img.height * imgWidth) / img.width;
+
+  if (imgHeight > maxHeight) {
+    imgHeight = maxHeight;
+    imgWidth = (img.width * imgHeight) / img.height;
+  }
+
+  const x = (pageWidth - imgWidth) / 2;
+  const y = margin;
+
+  pdf.addImage(imgData, "JPEG", x, y, imgWidth, imgHeight);
+
+  const fileName = `${safeFileName(ticket.firstName || "attendee")}_${safeFileName(ticket.lastName || "")}_${safeFileName(ticket.ticketId || "ticket")}.pdf`;
+  pdf.save(fileName);
+}
+
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    formMessage.textContent = "";
+
+    const error = validateForm();
+    if (error) {
+      formMessage.textContent = error;
+      return;
+    }
+
+    const payload = {
+      action: "register",
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
+      dob: dob.value,
+      age: age.value,
+      mobile: mobile.value.trim(),
+      memberType: memberType.value,
+      partnerId: partnerId ? partnerId.value.trim() : "",
+      referredBy: referredBy.value.trim(),
+      email: email ? email.value.trim() : ""
+    };
+
+    try {
+      submitBtn.disabled = true;
+      showLoading(true);
+
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      showLoading(false);
+      submitBtn.disabled = false;
+
+      if (!result.success) {
+        formMessage.textContent = result.message || "Registration failed.";
+        return;
+      }
+
+      savedTicket = result.ticket;
+      showSuccess(result.ticket);
+
+      form.reset();
+      age.value = "";
+      partnerField.classList.add("hidden");
+      if (partnerId) partnerId.value = "";
+    } catch (error) {
+      showLoading(false);
+      submitBtn.disabled = false;
+      formMessage.textContent = "Connection error. Please try again.";
+      console.error("Registration error:", error);
+    }
+  });
+}
+
+if (okBtn) {
+  okBtn.addEventListener("click", () => {
+    successOverlay.classList.remove("show");
+  });
+}
+
+if (downloadBtn) {
+  downloadBtn.addEventListener("click", async () => {
+    if (!savedTicket) return;
+
+    try {
+      showLoading(true);
+      await downloadTicketPdf(savedTicket);
+      showLoading(false);
+    } catch (error) {
+      showLoading(false);
+      console.error("PDF download error:", error);
+      alert("Could not download the PDF ticket.");
+    }
+  });
+}
+    </script>
+</body>
+</html>

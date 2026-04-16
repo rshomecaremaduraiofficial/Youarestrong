@@ -1,0 +1,852 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booked Members - You Are Strong Ministry</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        :root {
+            --glass-bg: rgba(255,255,255,0.11);
+            --glass-border: rgba(255,255,255,0.18);
+            --text-soft: rgba(255,255,255,0.82);
+            --text-muted: rgba(255,255,255,0.72);
+            --primary-dark: #16324f;
+            --danger: #ff6363;
+            --success: #1fbf75;
+            --warning: #ffb347;
+            --info: #4aa8ff;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            background: linear-gradient(rgba(8,18,38,0.72), rgba(8,18,38,0.88)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            padding: 18px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.22;
+            pointer-events: none;
+            animation: floatGlow 10s ease-in-out infinite;
+            z-index: 0;
+        }
+
+            .bg-glow.one {
+                width: 260px;
+                height: 260px;
+                background: rgba(255,255,255,0.20);
+                top: 4%;
+                left: 4%;
+            }
+
+            .bg-glow.two {
+                width: 320px;
+                height: 320px;
+                background: rgba(173,216,255,0.14);
+                right: 4%;
+                bottom: 4%;
+                animation-delay: 2s;
+            }
+
+        .page {
+            max-width: 1380px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: pageEnter 0.8s ease;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 22px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .glass-card::before {
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+                top: -90px;
+                right: -90px;
+                pointer-events: none;
+            }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .subtext {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 11px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, background 0.25s ease;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+            }
+
+        .btn-light {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 18px;
+            animation: fadeSlide 0.45s ease;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: 1fr 220px 220px;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.16);
+            outline: none;
+            background: rgba(255,255,255,0.94);
+            color: var(--primary-dark);
+            font-size: 14px;
+        }
+
+            input:focus, select:focus {
+                box-shadow: 0 0 0 4px rgba(255,255,255,0.14);
+            }
+
+        .table-wrap {
+            overflow: auto;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1400px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+            vertical-align: top;
+            font-size: 13px;
+        }
+
+        th {
+            background: rgba(255,255,255,0.10);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        td {
+            color: rgba(255,255,255,0.92);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 10, 24, 0.62);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease;
+        }
+
+            .loading-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .loading-box {
+            width: 100%;
+            max-width: 360px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 26px 20px;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .ring1, .ring2 {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.16);
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        .ring2 {
+            inset: 9px;
+            animation-direction: reverse;
+            animation-duration: 1.4s;
+            border-top-color: rgba(173,216,255,0.95);
+        }
+
+        .cross {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: gentlePulse 1.6s ease-in-out infinite;
+        }
+
+        .loading-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.7;
+        }
+
+        .toast-wrap {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 12000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: min(92vw, 360px);
+        }
+
+        .toast {
+            background: rgba(12, 21, 42, 0.88);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: white;
+            border-radius: 18px;
+            padding: 14px 16px;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.28);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transform: translateX(120%);
+            opacity: 0;
+            animation: toastIn .4s ease forwards;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .toast.hide {
+                animation: toastOut .35s ease forwards;
+            }
+
+            .toast::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 3px;
+                width: 100%;
+                background: rgba(255,255,255,0.18);
+            }
+
+            .toast.success::after {
+                background: var(--success);
+            }
+
+            .toast.error::after {
+                background: var(--danger);
+            }
+
+            .toast.warning::after {
+                background: var(--warning);
+            }
+
+            .toast.info::after {
+                background: var(--info);
+            }
+
+        .toast-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .toast-body {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .toast-text {
+            font-size: 13px;
+            color: rgba(255,255,255,0.84);
+            line-height: 1.5;
+        }
+
+        .toast-close {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            padding: 0;
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes floatGlow {
+            0%,100% {
+                transform: translate(0,0) scale(1);
+            }
+
+            50% {
+                transform: translate(14px,-18px) scale(1.05);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes gentlePulse {
+            0%,100% {
+                transform: scale(1);
+                opacity: 0.84;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(120%) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes toastOut {
+            from {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateX(120%) scale(0.96);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .brand {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .glass-card {
+                padding: 18px 14px;
+                border-radius: 20px;
+            }
+
+            .toast-wrap {
+                top: 14px;
+                right: 14px;
+                left: 14px;
+                width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow one"></div>
+    <div class="bg-glow two"></div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <div class="page">
+        <div class="topbar">
+            <div>
+                <div class="brand">Booked Members</div>
+                <div class="subtext">
+                    View all event registrations from your Google Sheet database.
+                </div>
+            </div>
+
+            <div class="top-actions">
+                <button class="btn btn-outline" onclick="loadBookedMembers()">Refresh</button>
+                <button class="btn btn-light" onclick="goToDashboard()">Back to Dashboard</button>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Booked</div>
+                <div class="stat-value" id="totalBooked">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Old Members</div>
+                <div class="stat-value" id="totalOldMembers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">New Members</div>
+                <div class="stat-value" id="totalNewMembers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">With Partner ID</div>
+                <div class="stat-value" id="totalPartnerId">0</div>
+            </div>
+        </div>
+
+        <div class="glass-card">
+            <div class="toolbar">
+                <input type="text" id="searchInput" placeholder="Search by ticket ID, name, mobile, partner ID, email...">
+                <select id="memberTypeFilter">
+                    <option value="">All Member Types</option>
+                    <option value="Old Member">Old Member</option>
+                    <option value="New Member">New Member</option>
+                </select>
+                <select id="referredByFilter">
+                    <option value="">All Referred By</option>
+                </select>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Registered At</th>
+                            <th>Ticket ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Date of Birth</th>
+                            <th>Age</th>
+                            <th>Mobile Number</th>
+                            <th>Member Type</th>
+                            <th>Partner ID</th>
+                            <th>Referred By</th>
+                            <th>Email</th>
+                            <th>Event Name</th>
+                            <th>Event Date</th>
+                            <th>Event Location</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookedMembersTableBody">
+                        <tr>
+                            <td colspan="14">Loading booked members...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="loading-spinner">
+                <div class="ring1"></div>
+                <div class="ring2"></div>
+                <div class="cross">✝</div>
+            </div>
+            <div class="loading-title">Please Wait</div>
+            <div class="loading-text" id="loadingText">Loading booked members...</div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaktKm6VE7iJI4WcWY9VHVceUzXyRSY5LJJyXEhtrAjvwOphQlqft98cZNzo-NV2AQ-A/exec";
+
+        let allBookedMembers = [];
+
+        const bookedMembersTableBody = document.getElementById("bookedMembersTableBody");
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const loadingText = document.getElementById("loadingText");
+        const toastWrap = document.getElementById("toastWrap");
+
+        const searchInput = document.getElementById("searchInput");
+        const memberTypeFilter = document.getElementById("memberTypeFilter");
+        const referredByFilter = document.getElementById("referredByFilter");
+
+        function goToDashboard() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get("token") || "";
+
+            if (token) {
+                window.location.href = "admin-panel.html?token=" + encodeURIComponent(token);
+            } else {
+                window.location.href = "admin-panel.html";
+            }
+        }
+
+        function showLoading(text = "Please wait...") {
+            loadingText.textContent = text;
+            loadingOverlay.classList.add("show");
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove("show");
+        }
+
+        function showToast(title, message = "", type = "info", duration = 3200) {
+            const icons = {
+                success: "✓",
+                error: "✕",
+                warning: "!",
+                info: "i"
+            };
+
+            const toast = document.createElement("div");
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || "i"}</div>
+                <div class="toast-body">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-text">${message}</div>
+                </div>
+                <button class="toast-close" aria-label="Close">&times;</button>
+            `;
+
+            const closeBtn = toast.querySelector(".toast-close");
+            closeBtn.addEventListener("click", () => removeToast(toast));
+
+            toastWrap.appendChild(toast);
+
+            const timer = setTimeout(() => removeToast(toast), duration);
+            toast.dataset.timer = timer;
+        }
+
+        function removeToast(toast) {
+            if (!toast) return;
+            clearTimeout(Number(toast.dataset.timer));
+            toast.classList.add("hide");
+            setTimeout(() => toast.remove(), 350);
+        }
+
+        async function apiGet(action) {
+            const url = `${SCRIPT_URL}?action=${encodeURIComponent(action)}`;
+            const res = await fetch(url);
+            const text = await res.text();
+
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                throw new Error("Invalid server response");
+            }
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function formatDateTime(value) {
+            if (!value) return "-";
+            const d = new Date(value);
+            if (isNaN(d.getTime())) return String(value);
+
+            const day = String(d.getDate()).padStart(2, "0");
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const year = d.getFullYear();
+
+            let hours = d.getHours();
+            const minutes = String(d.getMinutes()).padStart(2, "0");
+            const ampm = hours >= 12 ? "PM" : "AM";
+            hours = hours % 12 || 12;
+
+            return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
+        }
+
+        function formatDate(value) {
+            if (!value) return "-";
+            const d = new Date(value);
+            if (isNaN(d.getTime())) return String(value);
+
+            const day = String(d.getDate()).padStart(2, "0");
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const year = d.getFullYear();
+
+            return `${day}-${month}-${year}`;
+        }
+
+        function renderStats(data) {
+            document.getElementById("totalBooked").textContent = data.length;
+            document.getElementById("totalOldMembers").textContent = data.filter(x => (x.memberType || "").toLowerCase() === "old member").length;
+            document.getElementById("totalNewMembers").textContent = data.filter(x => (x.memberType || "").toLowerCase() === "new member").length;
+            document.getElementById("totalPartnerId").textContent = data.filter(x => String(x.partnerId || "").trim() !== "").length;
+        }
+
+        function renderTable(data) {
+            if (!data.length) {
+                bookedMembersTableBody.innerHTML = `<tr><td colspan="14">No booked members found.</td></tr>`;
+                return;
+            }
+
+            bookedMembersTableBody.innerHTML = data.map(member => `
+                <tr>
+                    <td>${escapeHtml(formatDateTime(member.registeredAt))}</td>
+                    <td>${escapeHtml(member.ticketId || "-")}</td>
+                    <td>${escapeHtml(member.firstName || "-")}</td>
+                    <td>${escapeHtml(member.lastName || "-")}</td>
+                    <td>${escapeHtml(formatDate(member.dob))}</td>
+                    <td>${escapeHtml(member.age || "-")}</td>
+                    <td>${escapeHtml(member.mobile || "-")}</td>
+                    <td>${escapeHtml(member.memberType || "-")}</td>
+                    <td>${escapeHtml(member.partnerId || "-")}</td>
+                    <td>${escapeHtml(member.referredBy || "-")}</td>
+                    <td>${escapeHtml(member.email || "-")}</td>
+                    <td>${escapeHtml(member.eventName || "-")}</td>
+                    <td>${escapeHtml(member.eventDate || "-")}</td>
+                    <td>${escapeHtml(member.eventLocation || "-")}</td>
+                </tr>
+            `).join("");
+        }
+
+        function populateReferredByFilter(data) {
+            const currentValue = referredByFilter.value;
+            const uniqueRefs = [...new Set(
+                data
+                    .map(x => String(x.referredBy || "").trim())
+                    .filter(Boolean)
+            )].sort();
+
+            referredByFilter.innerHTML = `<option value="">All Referred By</option>` +
+                uniqueRefs.map(name => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
+
+            referredByFilter.value = currentValue;
+        }
+
+        function applyFilters() {
+            const q = searchInput.value.trim().toLowerCase();
+            const memberType = memberTypeFilter.value.trim().toLowerCase();
+            const referredBy = referredByFilter.value.trim().toLowerCase();
+
+            const filtered = allBookedMembers.filter(member => {
+                const text = `
+                    ${member.ticketId || ""}
+                    ${member.firstName || ""}
+                    ${member.lastName || ""}
+                    ${member.mobile || ""}
+                    ${member.partnerId || ""}
+                    ${member.referredBy || ""}
+                    ${member.email || ""}
+                    ${member.eventName || ""}
+                    ${member.eventDate || ""}
+                    ${member.eventLocation || ""}
+                `.toLowerCase();
+
+                const matchSearch = !q || text.includes(q);
+                const matchMemberType = !memberType || (member.memberType || "").toLowerCase() === memberType;
+                const matchReferredBy = !referredBy || (member.referredBy || "").toLowerCase() === referredBy;
+
+                return matchSearch && matchMemberType && matchReferredBy;
+            });
+
+            renderStats(filtered);
+            renderTable(filtered);
+        }
+
+        async function loadBookedMembers() {
+            showLoading("Loading booked members...");
+
+            try {
+                const result = await apiGet("getAllRegistrations");
+
+                if (!result.success) {
+                    showToast("Error", result.message || "Unable to load booked members.", "error");
+                    renderStats([]);
+                    renderTable([]);
+                    return;
+                }
+
+                allBookedMembers = Array.isArray(result.data) ? result.data : [];
+                populateReferredByFilter(allBookedMembers);
+                renderStats(allBookedMembers);
+                renderTable(allBookedMembers);
+                applyFilters();
+
+                showToast("Loaded", "Booked members loaded successfully.", "success");
+            } catch (error) {
+                console.error(error);
+                showToast("Connection error", "Unable to reach server.", "error");
+                renderStats([]);
+                renderTable([]);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        searchInput.addEventListener("input", applyFilters);
+        memberTypeFilter.addEventListener("change", applyFilters);
+        referredByFilter.addEventListener("change", applyFilters);
+
+        loadBookedMembers();
+    </script>
+</body>
+</html>
