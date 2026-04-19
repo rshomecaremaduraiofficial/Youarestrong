@@ -1,0 +1,1118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - You Are Strong Ministry</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            background: linear-gradient(rgba(8, 18, 38, 0.72), rgba(8, 18, 38, 0.86)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            padding: 18px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.22;
+            pointer-events: none;
+            animation: floatGlow 10s ease-in-out infinite;
+            z-index: 0;
+        }
+
+            .bg-glow.one {
+                width: 260px;
+                height: 260px;
+                background: rgba(255,255,255,0.20);
+                top: 5%;
+                left: 4%;
+            }
+
+            .bg-glow.two {
+                width: 320px;
+                height: 320px;
+                background: rgba(173,216,255,0.14);
+                right: 4%;
+                bottom: 4%;
+                animation-delay: 2s;
+            }
+
+        .page {
+            max-width: 1250px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: pageEnter 0.9s ease;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
+        }
+
+            .back-link:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.12);
+                opacity: 0.95;
+            }
+
+        .top-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .partner-id {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
+        }
+
+            .logout-btn:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.16);
+                opacity: 0.95;
+            }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 22px;
+            align-items: start;
+        }
+
+        .left-panel,
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .glass-card::before {
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+                top: -90px;
+                right: -90px;
+                pointer-events: none;
+            }
+
+        .profile-card {
+            text-align: center;
+        }
+
+        .avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.20);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .profile-card h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .profile-card p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.82);
+            line-height: 1.7;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .info-box:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 22px rgba(0,0,0,0.14);
+            }
+
+        .info-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.72);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 17px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .loading-text {
+            text-align: center;
+            font-size: 16px;
+            color: rgba(255,255,255,0.92);
+            padding: 10px 0;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-card {
+            text-decoration: none;
+            color: white;
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 24px 18px;
+            min-height: 150px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+            .action-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 18px 28px rgba(0,0,0,0.18);
+                background: rgba(255,255,255,0.12);
+            }
+
+        .action-icon {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .action-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .action-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .coming-soon-box {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 22px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+            .coming-soon-box:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 16px 28px rgba(0,0,0,0.16);
+            }
+
+        .quiz-announcement-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .verse-announcement-box {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 22px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+            .verse-announcement-box:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 16px 28px rgba(0,0,0,0.16);
+            }
+
+        .notice-item {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 16px;
+            padding: 16px;
+            margin-top: 14px;
+        }
+
+        .notice-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.72);
+            margin-bottom: 8px;
+        }
+
+        .notice-value {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.92);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .contact-wrap {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-card {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 20px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+            .contact-card:hover {
+                transform: translateY(-4px) scale(1.01);
+                box-shadow: 0 16px 28px rgba(0,0,0,0.18);
+            }
+
+        .contact-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .contact-value {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.86);
+            word-break: break-word;
+        }
+
+        .quiz-buttons {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .quiz-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+        }
+
+            .quiz-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+            }
+
+        .quiz-btn-left {
+            background: white;
+            color: #16324f;
+        }
+
+        .quiz-btn-right {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: white;
+        }
+
+        .quiz-status {
+            margin-top: 14px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.86);
+            line-height: 1.6;
+        }
+
+        .popup-overlay,
+        .notice-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 10, 24, 0.58);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.35s;
+            padding: 16px;
+        }
+
+            .popup-overlay.show,
+            .notice-popup-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .popup-box,
+        .notice-popup-box {
+            max-width: 460px;
+            width: calc(100% - 24px);
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 22px 50px rgba(0,0,0,0.28);
+            transform: translateY(18px) scale(0.96);
+            transition: transform 0.35s ease;
+        }
+
+        .popup-overlay.show .popup-box,
+        .notice-popup-overlay.show .notice-popup-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .popup-icon,
+        .notice-popup-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .popup-title,
+        .notice-popup-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .popup-text,
+        .notice-popup-text {
+            font-size: 14px;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        .popup-btn,
+        .notice-popup-btn {
+            margin-top: 18px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: #16324f;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+            .popup-btn:hover,
+            .notice-popup-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+            }
+
+       
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes floatGlow {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(14px, -18px) scale(1.05);
+            }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .left-panel,
+            .right-panel {
+                gap: 18px;
+            }
+
+            .profile-card {
+                text-align: left;
+            }
+
+            .avatar {
+                margin: 0 0 18px 0;
+            }
+
+            .quiz-announcement-wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .glass-card {
+                padding: 20px 16px;
+                border-radius: 22px;
+            }
+
+            .profile-card h1 {
+                font-size: 26px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-card {
+                min-height: auto;
+            }
+
+            .info-value {
+                font-size: 16px;
+            }
+           
+        }
+
+        @media (max-width: 420px) {
+            .avatar {
+                width: 76px;
+                height: 76px;
+                font-size: 24px;
+            }
+
+            .profile-card h1 {
+                font-size: 22px;
+            }
+
+            .partner-id,
+            .back-link,
+            .logout-btn {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-glow one"></div>
+    <div class="bg-glow two"></div>
+
+    <div class="page">
+        <div class="topbar">
+            <a href="index.html" class="back-link">← Back to Home</a>
+
+            <div class="top-right-actions">
+                <div class="partner-id" id="partnerId">Partner ID: -----</div>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="main-layout">
+            <div class="left-panel">
+                <div class="glass-card profile-card">
+                    <div class="avatar" id="avatarText">U</div>
+                    <h1 id="fullName">Profile</h1>
+                    <p>Your profile information from the ministry records.</p>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="section-title">Profile Information</h2>
+
+                    <div class="profile-grid" id="profileGrid" style="display:none;">
+                        <div class="info-box">
+                            <div class="info-label">First Name</div>
+                            <div class="info-value" id="firstName">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">Last Name</div>
+                            <div class="info-value" id="lastName">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value" id="phone">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">Gender</div>
+                            <div class="info-value" id="gender">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">Date of Birth</div>
+                            <div class="info-value" id="dob">-</div>
+                        </div>
+                    </div>
+
+                    <div class="loading-text" id="loadingText">Loading...</div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="glass-card">
+                    <h2 class="section-title">Ministry Actions</h2>
+                    <div class="action-grid">
+                        <a href="flyer-page.html" class="action-card">
+                            <div class="action-icon">📅</div>
+                            <div class="action-title">Upcoming Events</div>
+                            <div class="action-desc">View all upcoming ministry gatherings, youth meetings, and special programs.</div>
+                        </a>
+
+                        <a href="coming-soon.html" class="action-card">
+                            <div class="action-icon">🙏</div>
+                            <div class="action-title">Prayer Request</div>
+                            <div class="action-desc">Submit your prayer needs and let the ministry stand with you in faith and prayer.</div>
+                        </a>
+
+                        <a href="coming-soon.html" class="action-card">
+                            <div class="action-icon">✨</div>
+                            <div class="action-title">Testimony</div>
+                            <div class="action-desc">Share what God has done in your life and encourage others through your testimony.</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="quiz-announcement-wrap">
+                    <div class="glass-card">
+                        <h2 class="section-title">Quiz Section</h2>
+                        <div class="coming-soon-box">
+                            <div class="action-title">Bible Quiz</div>
+                            <div class="action-desc" style="margin-top:10px;">
+                                Attend the quiz and improve your scripture knowledge.
+                                Once submitted, the quiz will be marked as completed automatically.
+                            </div>
+
+                            <div class="quiz-buttons">
+                                <a id="quizOpenBtn" href="quiz.html" class="quiz-btn quiz-btn-left">Open Quiz</a>
+                                <button class="quiz-btn quiz-btn-right" id="viewResultBtn" onclick="openQuizResult()">View Result</button>
+                            </div>
+
+                            <div class="quiz-status" id="quizStatusText">Quiz status: Not completed</div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h2 class="section-title">Daily Verse & Announcement</h2>
+                        <div class="verse-announcement-box">
+                            <div class="notice-item">
+                                <div class="notice-label">Daily Bible Verse</div>
+                                <div class="notice-value" id="dailyVerseText">Loading verse...</div>
+                            </div>
+
+                            <div class="notice-item">
+                                <div class="notice-label">Announcement</div>
+                                <div class="notice-value" id="announcementText">Loading announcement...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h2 class="section-title">Contact Information</h2>
+                    <div class="contact-wrap">
+                        <div class="contact-card">
+                            <div class="contact-title">Ministry Office</div>
+                            <div class="contact-value">You Are Strong Ministry<br>Banglore</div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-title">Phone</div>
+                            <div class="contact-value">+91 80954 49951</div>
+                            <div class="contact-value">+91 97426 38179</div>
+                        </div>
+                        <div class="contact-card">
+                            <div class="contact-title">Email</div>
+                            <div class="contact-value">Youarestrong06@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup-box">
+            <div class="popup-icon">✝</div>
+            <div class="popup-title" id="welcomeTitle"></div>
+            <div class="popup-text" id="welcomeText"></div>
+
+            <div class="popup-text" style="margin-top:10px; font-style:oblique;">
+                "பிதாக்களை, ஆதியிலிருக்கிறவரை நீங்கள் அறிந்திருக்கிறபடியினால் உங்களுக்கு எழுதியிருக்கிறேன்.
+                வாலிபரே, நீங்கள் பலவான்களாயிருக்கிறபடியினாலும், தேவவசனம் உங்களில் நிலைத்திருக்கிறபடியினாலும்,
+                நீங்கள் பொல்லாங்கனை ஜெயித்தபடியினாலும் உங்களுக்கு எழுதியிருக்கிறேன்"
+                <br><b>1 யோவான் 2:14</b>
+            </div>
+
+            <button class="popup-btn" id="welcomeOkBtn">Continue</button>
+        </div>
+    </div>
+
+    <div class="notice-popup-overlay" id="noticePopup">
+        <div class="notice-popup-box">
+            <div class="notice-popup-icon">🔔</div>
+            <div class="notice-popup-title" id="noticePopupTitle">New Update</div>
+            <div class="notice-popup-text" id="noticePopupText">
+                You have a new daily verse or announcement. Please check it.
+            </div>
+            <button class="notice-popup-btn" id="noticePopupBtn">Check Now</button>
+        </div>
+    </div>
+
+   
+    <script>
+    const PROFILE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKrzmVxafSkNlwyp-DbQJykh8kEvHslK6PEEaSAmvmk4mXucNuoqvH5uVjJEgFWS-o0A/exec";
+    const QUIZ_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCNL-3svzyaA5oQYa36jfJlTwoorHB36DDJmeG2awiwhclEPElAE2iW-kHagBfKj_V-g/exec";
+    const NOTICE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwG5hyJPPfbupXrmgGOeLM-xUuIRbhA1c1ojuDvq8EF2h6suoY-aAgcN9qIR5f3nne/exec";
+
+    const username = new URLSearchParams(window.location.search).get("username") || localStorage.getItem("loggedInUser") || "";
+    const welcomePopup = document.getElementById("welcomePopup");
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const welcomeText = document.getElementById("welcomeText");
+
+    const noticePopup = document.getElementById("noticePopup");
+    const noticePopupTitle = document.getElementById("noticePopupTitle");
+    const noticePopupText = document.getElementById("noticePopupText");
+    const noticePopupBtn = document.getElementById("noticePopupBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    let lastQuizId = localStorage.getItem("lastQuizId") || "";
+    let currentFirstName = "User";
+
+    function showWelcome(name) {
+        welcomeTitle.textContent = "Welcome, " + name + " 👋";
+        welcomeText.textContent = "Stay strong in faith and walk with purpose.";
+        welcomePopup.classList.add("show");
+    }
+
+    function hideWelcome() {
+        welcomePopup.classList.remove("show");
+    }
+
+    document.getElementById("welcomeOkBtn").onclick = () => {
+        hideWelcome();
+    };
+
+    function showNoticeUpdatePopup(firstName, hasVerseUpdate, hasAnnouncementUpdate) {
+        let message = "";
+
+        if (hasVerseUpdate && hasAnnouncementUpdate) {
+            message = firstName + ", you have a new daily verse and a new announcement. Please check them.";
+        } else if (hasVerseUpdate) {
+            message = firstName + ", you have a new daily verse. Please check it.";
+        } else if (hasAnnouncementUpdate) {
+            message = firstName + ", you have a new announcement. Please check it.";
+        } else {
+            return;
+        }
+
+        noticePopupTitle.textContent = "New Update for You";
+        noticePopupText.textContent = message;
+        noticePopup.classList.add("show");
+    }
+
+    function hideNoticeUpdatePopup() {
+        noticePopup.classList.remove("show");
+    }
+
+    noticePopupBtn.onclick = function () {
+        hideNoticeUpdatePopup();
+        document.querySelector(".verse-announcement-box").scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    };
+
+    noticePopup.addEventListener("click", function (e) {
+        if (e.target === noticePopup) {
+            hideNoticeUpdatePopup();
+        }
+    });
+
+    function getInitials(firstName, lastName) {
+        const first = firstName ? firstName.trim().charAt(0).toUpperCase() : "";
+        const last = lastName ? lastName.trim().charAt(0).toUpperCase() : "";
+        return (first + last) || "U";
+    }
+
+    function formatDOBOnly(dateValue) {
+        if (!dateValue) return "-";
+        const raw = String(dateValue).trim();
+        if (raw.includes("T")) return raw.split("T")[0];
+        if (raw.includes(" ")) return raw.split(" ")[0];
+        return raw;
+    }
+
+    function toBool(value) {
+        if (typeof value === "boolean") return value;
+        if (typeof value === "number") return value === 1;
+        if (typeof value === "string") {
+            const v = value.trim().toLowerCase();
+            return ["true", "yes", "1", "done", "completed", "complete"].includes(v);
+        }
+        return false;
+    }
+
+    async function profileApi(payload) {
+        const res = await fetch(PROFILE_SCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        return JSON.parse(text);
+    }
+
+    async function quizApi(payload) {
+        const res = await fetch(QUIZ_SCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        return JSON.parse(text);
+    }
+
+    async function noticeApi(payload) {
+        const res = await fetch(NOTICE_SCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const text = await res.text();
+        return JSON.parse(text);
+    }
+
+    function updateQuizLink() {
+        const quizOpenBtn = document.getElementById("quizOpenBtn");
+        if (username) {
+            quizOpenBtn.href = "quiz.html?username=" + encodeURIComponent(username);
+        } else {
+            quizOpenBtn.href = "quiz.html";
+        }
+    }
+
+    function openQuizResult() {
+        if (!username) {
+            alert("User not found.");
+            return;
+        }
+
+        const storedQuizId = localStorage.getItem("lastQuizId") || "";
+        const finalQuizId = lastQuizId || storedQuizId;
+
+        if (!finalQuizId) {
+            alert("Quiz result is not available yet.");
+            return;
+        }
+
+        window.location.href =
+            "quiz-result.html?username=" +
+            encodeURIComponent(username) +
+            "&quizId=" +
+            encodeURIComponent(finalQuizId);
+    }
+
+    async function loadQuizStatus() {
+        if (!username) return;
+
+        try {
+            const activeQuizResult = await quizApi({
+                action: "getActiveQuiz",
+                username: username
+            });
+
+            if (!activeQuizResult.success || !activeQuizResult.quiz) {
+                document.getElementById("quizStatusText").textContent = "Quiz status: No active quiz";
+                return;
+            }
+
+            lastQuizId = activeQuizResult.quiz.quizId || "";
+            if (lastQuizId) {
+                localStorage.setItem("lastQuizId", lastQuizId);
+            }
+
+            const result = await quizApi({
+                action: "getQuizResult",
+                username: username,
+                quizId: lastQuizId
+            });
+
+            if (result.success && result.result) {
+                const isDone =
+                    toBool(result.result.quizDone) ||
+                    toBool(result.result.completed) ||
+                    toBool(result.result.isCompleted) ||
+                    Number(result.result.score || 0) > 0 ||
+                    Number(result.result.total || 0) > 0;
+
+                if (isDone) {
+                    document.getElementById("quizStatusText").textContent = "Quiz status: Completed";
+                    localStorage.setItem("quizCompleted", "true");
+                } else {
+                    document.getElementById("quizStatusText").textContent = "Quiz status: Not completed";
+                    localStorage.setItem("quizCompleted", "false");
+                }
+            } else {
+                document.getElementById("quizStatusText").textContent = "Quiz status: Not completed";
+            }
+        } catch (error) {
+            console.error(error);
+            document.getElementById("quizStatusText").textContent = "Quiz status: Not completed";
+        }
+    }
+
+    async function loadNotices() {
+        try {
+            const result = await noticeApi({
+                action: "getNotice"
+            });
+
+            if (result.success) {
+                const newVerse = result.verse || "";
+                const newAnnouncement = result.announcement || "";
+                const newVersion = String(result.version || "0");
+
+                document.getElementById("dailyVerseText").textContent = newVerse || "No daily verse available.";
+                document.getElementById("announcementText").textContent = newAnnouncement || "No announcement available.";
+
+                const seenVersionKey = "seenNoticeVersion_" + username;
+                const oldVersion = localStorage.getItem(seenVersionKey) || "0";
+
+                const verseKey = "seenNoticeVerse_" + username;
+                const announcementKey = "seenNoticeAnnouncement_" + username;
+
+                const oldVerse = localStorage.getItem(verseKey) || "";
+                const oldAnnouncement = localStorage.getItem(announcementKey) || "";
+
+                const hasVerseUpdate = newVerse !== oldVerse && newVerse !== "";
+                const hasAnnouncementUpdate = newAnnouncement !== oldAnnouncement && newAnnouncement !== "";
+
+                if (username && oldVersion !== "0" && Number(newVersion) > Number(oldVersion)) {
+                    showNoticeUpdatePopup(currentFirstName, hasVerseUpdate, hasAnnouncementUpdate);
+                }
+
+                if (username) {
+                    localStorage.setItem(seenVersionKey, newVersion);
+                    localStorage.setItem(verseKey, newVerse);
+                    localStorage.setItem(announcementKey, newAnnouncement);
+                }
+            } else {
+                document.getElementById("dailyVerseText").textContent = "No daily verse available.";
+                document.getElementById("announcementText").textContent = "No announcement available.";
+            }
+        } catch (error) {
+            console.error(error);
+            document.getElementById("dailyVerseText").textContent = "No daily verse available.";
+            document.getElementById("announcementText").textContent = "No announcement available.";
+        }
+    }
+
+    async function loadProfile() {
+        try {
+            const result = await profileApi({
+                action: "getProfile",
+                username: username
+            });
+
+            if (result.success) {
+                const firstName = result.firstName || "";
+                const lastName = result.lastName || "";
+                currentFirstName = firstName || "User";
+
+                document.getElementById("partnerId").textContent = "Partner ID: " + (result.partnerId || "-----");
+                document.getElementById("firstName").textContent = firstName || "-";
+                document.getElementById("lastName").textContent = lastName || "-";
+                document.getElementById("phone").textContent = result.phone || "-";
+                document.getElementById("gender").textContent = result.gender || "-";
+                document.getElementById("dob").textContent = formatDOBOnly(result.dob);
+
+                document.getElementById("fullName").textContent =
+                    ((firstName + " " + lastName).trim()) || "Profile";
+
+                document.getElementById("avatarText").textContent =
+                    getInitials(firstName, lastName);
+
+                document.getElementById("loadingText").style.display = "none";
+                document.getElementById("profileGrid").style.display = "grid";
+
+                if (username) {
+                    localStorage.setItem("loggedInUser", username);
+                }
+
+                setTimeout(() => {
+                    showWelcome(firstName || "User");
+                }, 500);
+
+                await loadNotices();
+            } else {
+                document.getElementById("loadingText").textContent = result.message || "Unable to load profile.";
+            }
+        } catch (error) {
+            console.error(error);
+            document.getElementById("loadingText").textContent = "Server connection failed.";
+        }
+    }
+
+    function logoutUser() {
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("lastQuizId");
+        localStorage.removeItem("quizCompleted");
+
+        if (username) {
+            localStorage.removeItem("seenNoticeVersion_" + username);
+            localStorage.removeItem("seenNoticeVerse_" + username);
+            localStorage.removeItem("seenNoticeAnnouncement_" + username);
+        }
+
+        window.location.href = "index.html";
+    }
+
+    logoutBtn.addEventListener("click", logoutUser);
+
+    updateQuizLink();
+    loadProfile();
+    loadQuizStatus();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coming Soon</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(7,14,35,0.72), rgba(7,14,35,0.88)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            color: white;
+            overflow: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* BACK BUTTON */
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            background: rgba(255,255,255,0.15);
+            padding: 10px 16px;
+            border-radius: 10px;
+            backdrop-filter: blur(6px);
+            transition: 0.3s;
+        }
+
+            .back-btn:hover {
+                background: rgba(255,255,255,0.25);
+                transform: translateY(-2px);
+            }
+
+        .box {
+            background: rgba(255,255,255,0.08);
+            padding: 50px 30px 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.28);
+            max-width: 560px;
+            width: 100%;
+        }
+
+        .cross {
+            font-size: 52px;
+            margin-bottom: 18px;
+            animation: glow 1.8s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #e2e8f0;
+        }
+
+        .highlight {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .toy-wrap {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 190px;
+        }
+
+        .toy {
+            position: relative;
+            width: 90px;
+            height: 160px;
+            animation: danceBody 1s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+
+        .head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 54px;
+            height: 54px;
+            margin-left: -27px;
+            background: #ffd89c;
+            border-radius: 50%;
+            animation: headBob 1s ease-in-out infinite;
+            box-shadow: inset 0 -4px 0 rgba(0,0,0,0.06);
+        }
+
+        .eye {
+            position: absolute;
+            top: 20px;
+            width: 6px;
+            height: 6px;
+            background: #222;
+            border-radius: 50%;
+        }
+
+            .eye.left {
+                left: 16px;
+            }
+
+            .eye.right {
+                right: 16px;
+            }
+
+        .smile {
+            position: absolute;
+            width: 16px;
+            height: 8px;
+            border-bottom: 3px solid #a33;
+            border-radius: 0 0 16px 16px;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
+        }
+
+        .body {
+            position: absolute;
+            top: 52px;
+            left: 50%;
+            width: 42px;
+            height: 56px;
+            margin-left: -21px;
+            background: #60a5fa;
+            border-radius: 14px;
+            box-shadow: inset 0 -5px 0 rgba(0,0,0,0.08);
+        }
+
+        .arm {
+            position: absolute;
+            top: 60px;
+            width: 14px;
+            height: 48px;
+            background: #ffd89c;
+            border-radius: 12px;
+            transform-origin: top center;
+        }
+
+            .arm.left {
+                left: 10px;
+                animation: armLeft 0.7s ease-in-out infinite alternate;
+            }
+
+            .arm.right {
+                right: 10px;
+                animation: armRight 0.7s ease-in-out infinite alternate;
+            }
+
+        .leg {
+            position: absolute;
+            top: 104px;
+            width: 14px;
+            height: 52px;
+            background: #1e293b;
+            border-radius: 12px;
+            transform-origin: top center;
+        }
+
+            .leg.left {
+                left: 26px;
+                animation: legLeft 0.6s ease-in-out infinite alternate;
+            }
+
+            .leg.right {
+                right: 26px;
+                animation: legRight 0.6s ease-in-out infinite alternate;
+            }
+
+        .foot {
+            position: absolute;
+            bottom: -4px;
+            width: 24px;
+            height: 10px;
+            background: #111827;
+            border-radius: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .ground {
+            margin: 8px auto 0;
+            width: 130px;
+            height: 10px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: groundPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%,100% {
+                opacity: 0.85;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes danceBody {
+            0%,100% {
+                transform: translateY(0) rotate(0);
+            }
+
+            25% {
+                transform: translateY(-4px) rotate(-8deg);
+            }
+
+            75% {
+                transform: translateY(-4px) rotate(8deg);
+            }
+        }
+
+        @keyframes headBob {
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        @keyframes armLeft {
+            0% {
+                transform: rotate(35deg);
+            }
+
+            100% {
+                transform: rotate(-45deg);
+            }
+        }
+
+        @keyframes armRight {
+            0% {
+                transform: rotate(-35deg);
+            }
+
+            100% {
+                transform: rotate(45deg);
+            }
+        }
+
+        @keyframes legLeft {
+            0% {
+                transform: rotate(18deg);
+            }
+
+            100% {
+                transform: rotate(-18deg);
+            }
+        }
+
+        @keyframes legRight {
+            0% {
+                transform: rotate(-18deg);
+            }
+
+            100% {
+                transform: rotate(18deg);
+            }
+        }
+
+        @keyframes groundPulse {
+            0%,100% {
+                transform: scaleX(1);
+                opacity: 0.45;
+            }
+
+            50% {
+                transform: scaleX(0.85);
+                opacity: 0.28;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACK BUTTON -->
+    <div class="top-bar">
+        <a href="Profile.html" class="back-btn">← Back</a>
+    </div>
+
+    <div class="box">
+        <div class="cross">✝</div>
+
+        <h1>Page Coming Soon</h1>
+
+        <p>
+            This page is currently under preparation.<br>
+            We are working with faith and dedication to bring it to you.
+        </p>
+
+        <div class="highlight">
+            This page will be available in 3 days.
+        </div>
+
+        <div class="toy-wrap">
+            <div>
+                <div class="toy">
+                    <div class="head">
+                        <div class="eye left"></div>
+                        <div class="eye right"></div>
+                        <div class="smile"></div>
+                    </div>
+
+                    <div class="body"></div>
+
+                    <div class="arm left"></div>
+                    <div class="arm right"></div>
+
+                    <div class="leg left"><div class="foot"></div></div>
+                    <div class="leg right"><div class="foot"></div></div>
+                </div>
+                <div class="ground"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

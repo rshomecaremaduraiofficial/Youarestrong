@@ -1,0 +1,755 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upcoming Meeting - You Are Strong Ministry</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+            background: #081226;
+        }
+
+        .bg-blur {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(5, 12, 28, 0.72), rgba(5, 12, 28, 0.90)), url("flyer.jpg") center/cover no-repeat;
+            filter: blur(12px);
+            transform: scale(1.1);
+            z-index: 0;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 34%), radial-gradient(circle at bottom right, rgba(173,216,255,0.10), transparent 34%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: pageEnter 0.9s ease;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+            animation: fadeSlideDown 0.8s ease;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .back-link:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.14);
+                box-shadow: 0 10px 18px rgba(0,0,0,0.16);
+            }
+
+        .user-badge {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .badge-pill {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.14);
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+            .badge-pill:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.14);
+            }
+
+        .main-card {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.16);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.30);
+            overflow: hidden;
+            position: relative;
+            animation: fadeUpCard 0.95s ease;
+        }
+
+            .main-card::before {
+                content: "";
+                position: absolute;
+                width: 260px;
+                height: 260px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+                top: -100px;
+                right: -100px;
+                pointer-events: none;
+            }
+
+        .event-layout {
+            display: grid;
+            grid-template-columns: 480px 1fr;
+            gap: 26px;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flyer-box {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 24px;
+            padding: 14px;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+            animation: softFloatIn 1s ease;
+        }
+
+        .flyer-image {
+            width: 100%;
+            display: block;
+            border-radius: 18px;
+            object-fit: cover;
+            max-height: 720px;
+            background: rgba(255,255,255,0.08);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+            .flyer-image:hover {
+                transform: scale(1.01);
+                box-shadow: 0 18px 28px rgba(0,0,0,0.20);
+            }
+
+        .content-box {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            animation: fadeRightIn 1s ease;
+        }
+
+        .label {
+            display: inline-block;
+            width: fit-content;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.16);
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            animation: fadeSlideDown 0.9s ease;
+        }
+
+        .title {
+            font-size: 38px;
+            line-height: 1.2;
+            font-weight: bold;
+            animation: fadeUpText 1s ease;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.88);
+            animation: fadeUpText 1.05s ease;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .detail-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 20px;
+            padding: 18px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            animation: fadeUpStagger 1s ease;
+        }
+
+            .detail-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 14px 24px rgba(0,0,0,0.16);
+                background: rgba(255,255,255,0.10);
+            }
+
+        .detail-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.72);
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 17px;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+            animation: fadeUpText 1.1s ease;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 14px;
+            padding: 14px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+        }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 22px rgba(0,0,0,0.16);
+            }
+
+        .btn-primary {
+            background: white;
+            color: #16324f;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.10);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .mini-note {
+            font-size: 13px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.78);
+            margin-top: 2px;
+            animation: fadeUpText 1.15s ease;
+        }
+
+        .footer-space {
+            height: 18px;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(3, 10, 24, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+            .loading-screen.hide {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+        .loading-box {
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 28px;
+            padding: 30px 24px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.28);
+            animation: modalPopIn 0.7s ease;
+        }
+
+        .loader-rings {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 18px;
+            position: relative;
+        }
+
+        .loader-ring,
+        .loader-ring-two,
+        .loader-ring-three {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+
+        .loader-ring {
+            border-top-color: rgba(255,255,255,0.95);
+            animation: spin 1.2s linear infinite;
+        }
+
+        .loader-ring-two {
+            inset: 8px;
+            border-right-color: rgba(173,216,255,0.9);
+            animation: spinReverse 1.6s linear infinite;
+        }
+
+        .loader-ring-three {
+            inset: 18px;
+            border-bottom-color: rgba(255,255,255,0.8);
+            animation: spin 1.9s linear infinite;
+        }
+
+        .loader-cross {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            animation: pulseGlow 1.5s ease-in-out infinite;
+        }
+
+        .loading-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.82);
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUpCard {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeUpText {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeRightIn {
+            from {
+                opacity: 0;
+                transform: translateX(22px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes softFloatIn {
+            from {
+                opacity: 0;
+                transform: translateY(26px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeUpStagger {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalPopIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spinReverse {
+            from {
+                transform: rotate(360deg);
+            }
+
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .event-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .flyer-box {
+                max-width: 560px;
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            .content-box {
+                text-align: left;
+            }
+
+            .title {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 14px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .user-badge {
+                width: 100%;
+                justify-content: stretch;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .badge-pill {
+                width: 100%;
+                text-align: center;
+            }
+
+            .main-card {
+                padding: 16px;
+                border-radius: 22px;
+            }
+
+            .flyer-box {
+                padding: 10px;
+                border-radius: 20px;
+            }
+
+            .flyer-image {
+                border-radius: 14px;
+                max-height: none;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 26px;
+            }
+
+            .label {
+                align-self: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .button-row {
+                flex-direction: column;
+            }
+
+            .loading-box {
+                padding: 24px 18px;
+                border-radius: 22px;
+            }
+
+            .loading-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-box">
+            <div class="loader-rings">
+                <div class="loader-ring"></div>
+                <div class="loader-ring-two"></div>
+                <div class="loader-ring-three"></div>
+                <div class="loader-cross">✝</div>
+            </div>
+            <div class="loading-title">Loading Event</div>
+            <div class="loading-text">Please wait while we prepare the meeting details for you.</div>
+        </div>
+    </div>
+
+    <div class="bg-blur"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="page">
+        <div class="topbar">
+            <a href="index.html" class="back-link">← Back to Home</a>
+
+            <div class="user-badge">
+                <div class="badge-pill" id="displayName">Name: New Member</div>
+                <div class="badge-pill" id="displayPartnerId">Partner ID: New Member</div>
+            </div>
+        </div>
+
+        <div class="main-card">
+            <div class="event-layout">
+                <div class="flyer-box">
+                    <img class="flyer-image"
+                         src="flyer.jpg"
+                         alt="Upcoming Event Flyer" />
+                </div>
+
+                <div class="content-box">
+                    <div class="label">Upcoming Youth Meeting</div>
+
+                    <div class="title">Youth Meeting</div>
+
+                    <div class="description">
+                        Join us for a powerful Youth Meeting, prayer, fellowship, and God’s Word.
+                        Come with expectation and invite your friends to experience a faith-filled night together.
+                    </div>
+
+                    <div class="details-grid">
+                        <div class="detail-card">
+                            <div class="detail-label">Date</div>
+                            <div class="detail-value">Friday, May 1st, 2026</div>
+                        </div>
+
+                        <div class="detail-card">
+                            <div class="detail-label">Time</div>
+                            <div class="detail-value">6:00 PM onwards</div>
+                        </div>
+
+                        <div class="detail-card full-width">
+                            <div class="detail-label">Place</div>
+                            <div class="detail-value">Bangalore. Please click and see the Map location</div>
+                        </div>
+                    </div>
+
+                    <div class="button-row">
+                        <a href="https://maps.google.com/?q=Your+Strong+Ministry+Hall+Bangalore"
+                           target="_blank"
+                           class="btn btn-secondary">
+                            Open Map Location
+                        </a>
+
+                        <a href="registration.html"
+                           class="btn btn-primary">
+                            Free Registration
+                        </a>
+                    </div>
+
+                    <div class="mini-note">
+                        Registration is free for all participants. Please register early to help us prepare seating and arrangements.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-space"></div>
+    </div>
+
+    <script>
+        const PROFILE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKrzmVxafSkNlwyp-DbQJykh8kEvHslK6PEEaSAmvmk4mXucNuoqvH5uVjJEgFWS-o0A/exec";
+
+        const username =
+            new URLSearchParams(window.location.search).get("username") ||
+            localStorage.getItem("loggedInUser") ||
+            "";
+
+        const loadingScreen = document.getElementById("loadingScreen");
+
+        function hideLoadingScreen() {
+            loadingScreen.classList.add("hide");
+            setTimeout(() => {
+                if (loadingScreen) {
+                    loadingScreen.style.display = "none";
+                }
+            }, 650);
+        }
+
+        async function profileApi(payload) {
+            const res = await fetch(PROFILE_SCRIPT_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const text = await res.text();
+            return JSON.parse(text);
+        }
+
+        async function loadUserHeader() {
+            const displayName = document.getElementById("displayName");
+            const displayPartnerId = document.getElementById("displayPartnerId");
+
+            if (!username) {
+                displayName.textContent = "Name: New Member";
+                displayPartnerId.textContent = "Partner ID: New Member";
+                return;
+            }
+
+            try {
+                const result = await profileApi({
+                    action: "getProfile",
+                    username: username
+                });
+
+                if (result.success) {
+                    const firstName = result.firstName || "";
+                    const lastName = result.lastName || "";
+                    const fullName = (firstName + " " + lastName).trim() || "New Member";
+                    const partnerId = result.partnerId || "New Member";
+
+                    displayName.textContent = "Name: " + fullName;
+                    displayPartnerId.textContent = "Partner ID: " + partnerId;
+
+                    localStorage.setItem("loggedInUser", username);
+                } else {
+                    displayName.textContent = "Name: New Member";
+                    displayPartnerId.textContent = "Partner ID: New Member";
+                }
+            } catch (error) {
+                console.error(error);
+                displayName.textContent = "Name: New Member";
+                displayPartnerId.textContent = "Partner ID: New Member";
+            }
+        }
+
+        async function initPage() {
+            try {
+                await loadUserHeader();
+            } finally {
+                setTimeout(hideLoadingScreen, 700);
+            }
+        }
+
+        window.addEventListener("load", () => {
+            initPage();
+        });
+    </script>
+</body>
+</html>

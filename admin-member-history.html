@@ -1,0 +1,1138 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Member History - You Are Strong Ministry</title>
+    <link rel="icon" type="image/png" href="logo.jpeg" />
+    <link rel="apple-touch-icon" href="logo.jpeg" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            background: linear-gradient(rgba(8, 18, 38, 0.72), rgba(8, 18, 38, 0.88)), url("https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+            padding: 18px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            opacity: 0.22;
+            pointer-events: none;
+            animation: floatGlow 10s ease-in-out infinite;
+            z-index: 0;
+        }
+
+            .bg-glow.one {
+                width: 260px;
+                height: 260px;
+                background: rgba(255,255,255,0.20);
+                top: 5%;
+                left: 4%;
+            }
+
+            .bg-glow.two {
+                width: 320px;
+                height: 320px;
+                background: rgba(173,216,255,0.14);
+                right: 4%;
+                bottom: 4%;
+                animation-delay: 2s;
+            }
+
+        .page,
+        .login-wrap {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            animation: pageEnter 0.9s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .back-link,
+        .logout-btn,
+        .top-pill {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .back-link:hover,
+            .logout-btn:hover {
+                transform: translateY(-2px);
+                background: rgba(255,255,255,0.12);
+                opacity: 0.95;
+            }
+
+            .back-link::after,
+            .logout-btn::after,
+            .login-btn::after,
+            .search-btn::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -120%;
+                width: 80%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+                transition: left 0.6s ease;
+            }
+
+            .back-link:hover::after,
+            .logout-btn:hover::after,
+            .login-btn:hover::after,
+            .search-btn:hover::after {
+                left: 140%;
+            }
+
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 22px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.35s ease;
+        }
+
+            .glass-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 22px 42px rgba(0,0,0,0.24);
+            }
+
+            .glass-card::before {
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+                top: -90px;
+                right: -90px;
+                pointer-events: none;
+            }
+
+        .hero-card,
+        .login-card {
+            text-align: center;
+        }
+
+        .hero-icon,
+        .login-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px auto;
+            font-size: 34px;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.20);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .hero-card h1,
+        .login-card h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero-card p,
+        .login-card p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.82);
+            line-height: 1.7;
+        }
+
+        .login-wrap {
+            min-height: calc(100vh - 36px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: min(460px, 100%);
+        }
+
+        .login-form {
+            margin-top: 22px;
+            display: grid;
+            gap: 14px;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.78);
+        }
+
+        .login-input,
+        .search-input,
+        .search-select {
+            width: 100%;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border-radius: 16px;
+            padding: 14px 16px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+            .login-input::placeholder,
+            .search-input::placeholder {
+                color: rgba(255,255,255,0.48);
+            }
+
+            .login-input:focus,
+            .search-input:focus,
+            .search-select:focus {
+                border-color: rgba(255,255,255,0.30);
+                background: rgba(255,255,255,0.11);
+                box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+                transform: translateY(-1px);
+            }
+
+            .search-select option {
+                color: #111;
+            }
+
+        .login-btn,
+        .search-btn {
+            border: none;
+            border-radius: 16px;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            background: white;
+            color: #16324f;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .login-btn:hover,
+            .search-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+            }
+
+            .login-btn:disabled,
+            .search-btn:disabled {
+                opacity: 0.72;
+                cursor: not-allowed;
+            }
+
+        .status-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            font-weight: bold;
+            display: none;
+            position: relative;
+            z-index: 1;
+            font-size: 14px;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.35s ease;
+        }
+
+            .status-box.info {
+                display: block;
+                background: rgba(13, 110, 253, 0.20);
+                border: 1px solid rgba(255,255,255,0.12);
+                color: #d9ebff;
+                animation: fadeInUp 0.45s ease;
+            }
+
+            .status-box.success {
+                display: block;
+                background: rgba(25, 135, 84, 0.20);
+                border: 1px solid rgba(255,255,255,0.12);
+                color: #dcffe9;
+                animation: fadeInUp 0.45s ease;
+            }
+
+            .status-box.error {
+                display: block;
+                background: rgba(220, 53, 69, 0.18);
+                border: 1px solid rgba(255,255,255,0.12);
+                color: #ffd8dd;
+                animation: fadeInUp 0.45s ease;
+            }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 220px 1fr 170px;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.08);
+            padding: 16px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.55s ease forwards;
+        }
+
+            .info-box:hover {
+                transform: translateY(-4px) scale(1.01);
+                box-shadow: 0 12px 22px rgba(0,0,0,0.14);
+            }
+
+        .info-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.72);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 880px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th {
+            background: rgba(255,255,255,0.10);
+            color: white;
+            font-size: 13px;
+            letter-spacing: 0.3px;
+        }
+
+        td {
+            color: rgba(255,255,255,0.92);
+        }
+
+        tbody tr {
+            transition: background 0.25s ease, transform 0.25s ease;
+        }
+
+            tbody tr:hover {
+                background: rgba(255,255,255,0.05);
+            }
+
+        .empty-box {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 18px;
+            padding: 18px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.80);
+            line-height: 1.7;
+            animation: fadeInUp 0.55s ease;
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.7s ease forwards;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.05s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.10s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.15s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.20s;
+        }
+
+        .stagger-5 {
+            animation-delay: 0.25s;
+        }
+
+        .stagger-6 {
+            animation-delay: 0.30s;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(4, 10, 20, 0.62);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+            padding: 16px;
+        }
+
+            .loading-overlay.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+        .loading-box {
+            width: min(430px, 100%);
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: 0 24px 52px rgba(0,0,0,0.30);
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.35s ease;
+        }
+
+        .loading-overlay.show .loading-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .loading-spinner {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .loading-ring,
+        .loading-ring-two {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.16);
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-ring-two {
+            inset: 9px;
+            border-top-color: rgba(173,216,255,0.95);
+            animation-direction: reverse;
+            animation-duration: 1.4s;
+        }
+
+        .loading-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .loading-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .loading-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.84);
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes floatGlow {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(14px, -18px) scale(1.05);
+            }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 14px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .glass-card {
+                padding: 20px 16px;
+                border-radius: 22px;
+            }
+
+            .hero-card h1,
+            .login-card h1 {
+                font-size: 25px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow one"></div>
+    <div class="bg-glow two"></div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-box">
+            <div class="loading-spinner">
+                <div class="loading-ring"></div>
+                <div class="loading-ring-two"></div>
+                <div class="loading-center">⏳</div>
+            </div>
+            <div class="loading-title" id="loadingTitle">Loading...</div>
+            <div class="loading-text" id="loadingText">Please wait.</div>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="login-wrap" id="loginWrap">
+        <div class="glass-card login-card fade-in">
+            <div class="login-icon">🔐</div>
+            <h1>Admin Access</h1>
+            <p>Login to search member details and meeting history.</p>
+
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label class="input-label" for="adminUsername">Username</label>
+                    <input class="login-input" id="adminUsername" type="text" placeholder="Enter admin username" required />
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="adminPassword">Password</label>
+                    <input class="login-input" id="adminPassword" type="password" placeholder="Enter admin password" required />
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            </form>
+
+            <div id="loginStatus" class="status-box"></div>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div class="page hidden" id="appPage">
+        <div class="topbar fade-in">
+            <a href="index.html" class="back-link">← Back to Home</a>
+
+            <div class="topbar-right">
+                <div class="top-pill" id="adminBadge">Admin Panel</div>
+                <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
+            </div>
+        </div>
+
+        <div class="glass-card hero-card fade-in">
+            <div class="hero-icon">📋</div>
+            <h1>Member Search & Meeting History</h1>
+            <p>Search by partner ID or first name to view member profile, registrations, and arrivals.</p>
+        </div>
+
+        <div class="glass-card fade-in">
+            <h2 class="section-title">Search Member</h2>
+
+            <div class="search-grid">
+                <select id="searchType" class="search-select">
+                    <option value="partnerId">Partner ID</option>
+                    <option value="firstName">First Name</option>
+                </select>
+
+                <input id="searchInput"
+                       class="search-input"
+                       type="text"
+                       placeholder="Enter partner ID or first name" />
+
+                <button id="searchBtn" class="search-btn">Search</button>
+            </div>
+
+            <div id="searchStatus" class="status-box"></div>
+        </div>
+
+        <div class="glass-card hidden" id="profileSection">
+            <h2 class="section-title">Member Profile</h2>
+            <div class="info-grid" id="profileGrid"></div>
+        </div>
+
+        <div class="glass-card hidden" id="registrationSection">
+            <h2 class="section-title">Meeting Registrations</h2>
+            <div id="registrationContent"></div>
+        </div>
+
+        <div class="glass-card hidden" id="arrivalSection">
+            <h2 class="section-title">Meeting Arrivals</h2>
+            <div id="arrivalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const PROFILE_API_URL = "https://script.google.com/macros/s/AKfycbzKrzmVxafSkNlwyp-DbQJykh8kEvHslK6PEEaSAmvmk4mXucNuoqvH5uVjJEgFWS-o0A/exec";
+        const EVENT_API_URL = "https://script.google.com/macros/s/AKfycbyU9EQB3xfSo6idwiyjnrNOguTA-4gDVQdVo8bx8lgUsl44kPe90QiUjjMczQv8OCza/exec";
+
+        const loginWrap = document.getElementById("loginWrap");
+        const appPage = document.getElementById("appPage");
+
+        const loginForm = document.getElementById("loginForm");
+        const loginBtn = document.getElementById("loginBtn");
+        const loginStatus = document.getElementById("loginStatus");
+        const logoutBtn = document.getElementById("logoutBtn");
+
+        const searchType = document.getElementById("searchType");
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const searchStatus = document.getElementById("searchStatus");
+
+        const profileSection = document.getElementById("profileSection");
+        const registrationSection = document.getElementById("registrationSection");
+        const arrivalSection = document.getElementById("arrivalSection");
+
+        const profileGrid = document.getElementById("profileGrid");
+        const registrationContent = document.getElementById("registrationContent");
+        const arrivalContent = document.getElementById("arrivalContent");
+
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const loadingTitle = document.getElementById("loadingTitle");
+        const loadingText = document.getElementById("loadingText");
+
+        let adminToken = sessionStorage.getItem("adminToken") || "";
+        let allUsersCache = [];
+        let allRegistrationsCache = [];
+        let allArrivalsCache = [];
+
+        function showLoading(title = "Loading...", text = "Please wait.") {
+            loadingTitle.textContent = title;
+            loadingText.textContent = text;
+            loadingOverlay.classList.add("show");
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove("show");
+        }
+
+        function showStatus(element, message, type = "info") {
+            element.className = "status-box " + type;
+            element.textContent = message;
+        }
+
+        function hideStatus(element) {
+            element.className = "status-box";
+            element.textContent = "";
+        }
+
+        function clean(value) {
+            return String(value || "").trim();
+        }
+
+        function normalizeText(value) {
+            return clean(value).toLowerCase();
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+        }
+
+        function formatDateTime(value) {
+            if (!value) return "-";
+            try {
+                return new Date(value).toLocaleString();
+            } catch (e) {
+                return String(value);
+            }
+        }
+
+        function formatDateOnly(value) {
+            if (!value) return "-";
+            const raw = String(value).trim();
+            if (raw.includes("T")) return raw.split("T")[0];
+            return raw;
+        }
+
+        async function postJson(url, payload) {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const text = await response.text();
+            return JSON.parse(text);
+        }
+
+        async function getJson(url) {
+            const response = await fetch(url);
+            const text = await response.text();
+            return JSON.parse(text);
+        }
+
+        function renderInfoBox(label, value, index = 1) {
+            return `
+                <div class="info-box stagger-${((index - 1) % 6) + 1}">
+                    <div class="info-label">${escapeHtml(label)}</div>
+                    <div class="info-value">${escapeHtml(value || "-")}</div>
+                </div>
+            `;
+        }
+
+        function renderEmpty(message) {
+            return `<div class="empty-box">${escapeHtml(message)}</div>`;
+        }
+
+        function renderTable(rows, type) {
+            if (!rows || !rows.length) {
+                return renderEmpty(type === "registration"
+                    ? "No meeting registration records found."
+                    : "No arrival records found.");
+            }
+
+            const htmlRows = rows.map((row, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${escapeHtml(row.eventName || "-")}</td>
+                    <td>${escapeHtml(row.eventDate || "-")}</td>
+                    <td>${escapeHtml(row.eventLocation || "-")}</td>
+                    <td>${escapeHtml(row.ticketId || "-")}</td>
+                    <td>${type === "registration" ? escapeHtml(formatDateTime(row.registeredAt)) : escapeHtml(formatDateTime(row.arrivedAt))}</td>
+                    <td>${type === "arrival" ? escapeHtml(row.status || "Arrived") : "Booked"}</td>
+                </tr>
+            `).join("");
+
+            return `
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Meeting Name</th>
+                                <th>Date</th>
+                                <th>Place</th>
+                                <th>Ticket ID</th>
+                                <th>${type === "registration" ? "Booked At" : "Arrived At"}</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${htmlRows}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function profileMatchesEvent(user, eventRow) {
+            const userPartnerId = normalizeText(user.partnerId);
+            const userFirstName = normalizeText(user.firstName);
+            const userLastName = normalizeText(user.lastName);
+
+            const eventPartnerId = normalizeText(eventRow.partnerId);
+            const eventFirstName = normalizeText(eventRow.firstName);
+            const eventLastName = normalizeText(eventRow.lastName);
+
+            if (userPartnerId && eventPartnerId && userPartnerId === eventPartnerId) {
+                return true;
+            }
+
+            if (userFirstName && eventFirstName && userFirstName === eventFirstName) {
+                if (!userLastName || !eventLastName) return true;
+                if (userLastName === eventLastName) return true;
+            }
+
+            return false;
+        }
+
+        function clearResults() {
+            profileSection.classList.add("hidden");
+            registrationSection.classList.add("hidden");
+            arrivalSection.classList.add("hidden");
+
+            profileGrid.innerHTML = "";
+            registrationContent.innerHTML = "";
+            arrivalContent.innerHTML = "";
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            hideStatus(loginStatus);
+
+            const username = document.getElementById("adminUsername").value.trim();
+            const password = document.getElementById("adminPassword").value.trim();
+
+            if (!username || !password) {
+                showStatus(loginStatus, "Please enter username and password.", "error");
+                return;
+            }
+
+            loginBtn.disabled = true;
+            showLoading("Checking access...", "Verifying admin login and preparing your dashboard.");
+
+            try {
+                const result = await postJson(PROFILE_API_URL, {
+                    action: "adminLogin",
+                    username: username,
+                    password: password
+                });
+
+                if (!result.success || !result.token) {
+                    hideLoading();
+                    showStatus(loginStatus, result.message || "Login failed.", "error");
+                    loginBtn.disabled = false;
+                    return;
+                }
+
+                adminToken = result.token;
+                sessionStorage.setItem("adminToken", adminToken);
+
+                showStatus(loginStatus, "Login successful.", "success");
+                await loadInitialData();
+                showApp();
+            } catch (error) {
+                console.error(error);
+                showStatus(loginStatus, "Server connection failed.", "error");
+            }
+
+            hideLoading();
+            loginBtn.disabled = false;
+        }
+
+        function showApp() {
+            loginWrap.classList.add("hidden");
+            appPage.classList.remove("hidden");
+        }
+
+        function showLogin() {
+            appPage.classList.add("hidden");
+            loginWrap.classList.remove("hidden");
+            clearResults();
+            hideStatus(searchStatus);
+        }
+
+        function logout() {
+            sessionStorage.removeItem("adminToken");
+            adminToken = "";
+            allUsersCache = [];
+            allRegistrationsCache = [];
+            allArrivalsCache = [];
+            showLogin();
+        }
+
+        async function loadInitialData() {
+            const userResult = await postJson(PROFILE_API_URL, {
+                action: "adminGetAllUsers",
+                token: adminToken
+            });
+
+            if (!userResult.success) {
+                throw new Error(userResult.message || "Unable to load users.");
+            }
+
+            const registrationResult = await getJson(EVENT_API_URL + "?action=getAllRegistrations");
+            const arrivalResult = await getJson(EVENT_API_URL + "?action=getAllArrivals");
+
+            if (!registrationResult.success) {
+                throw new Error(registrationResult.message || "Unable to load registrations.");
+            }
+
+            if (!arrivalResult.success) {
+                throw new Error(arrivalResult.message || "Unable to load arrivals.");
+            }
+
+            allUsersCache = Array.isArray(userResult.data) ? userResult.data : [];
+            allRegistrationsCache = Array.isArray(registrationResult.data) ? registrationResult.data : [];
+            allArrivalsCache = Array.isArray(arrivalResult.data) ? arrivalResult.data : [];
+        }
+
+        async function findUser() {
+            hideStatus(searchStatus);
+            clearResults();
+
+            const type = searchType.value;
+            const query = searchInput.value.trim();
+
+            if (!query) {
+                showStatus(searchStatus, "Please enter partner ID or first name.", "error");
+                return;
+            }
+
+            searchBtn.disabled = true;
+            showLoading("Searching member...", "Finding profile, registrations, and arrival history.");
+
+            try {
+                let matchedUsers = [];
+
+                if (type === "partnerId") {
+                    matchedUsers = allUsersCache.filter(user =>
+                        normalizeText(user.partnerId) === normalizeText(query)
+                    );
+                } else {
+                    matchedUsers = allUsersCache.filter(user =>
+                        normalizeText(user.firstName).includes(normalizeText(query))
+                    );
+                }
+
+                if (!matchedUsers.length) {
+                    showStatus(searchStatus, "No member found.", "error");
+                    hideLoading();
+                    searchBtn.disabled = false;
+                    return;
+                }
+
+                if (matchedUsers.length > 1 && type === "firstName") {
+                    showStatus(searchStatus, "Multiple members found with this first name. Showing the first result.", "info");
+                } else {
+                    showStatus(searchStatus, "Member found successfully.", "success");
+                }
+
+                const user = matchedUsers[0];
+                renderUserProfile(user);
+
+                const userRegistrations = allRegistrationsCache.filter(row => profileMatchesEvent(user, row));
+                const userArrivals = allArrivalsCache.filter(row => profileMatchesEvent(user, row));
+
+                renderRegistrations(userRegistrations);
+                renderArrivals(userArrivals);
+            } catch (error) {
+                console.error(error);
+                showStatus(searchStatus, "Search failed. Please try again.", "error");
+            }
+
+            hideLoading();
+            searchBtn.disabled = false;
+        }
+
+        function renderUserProfile(user) {
+            const items = [
+                ["Partner ID", user.partnerId],
+                ["First Name", user.firstName],
+                ["Last Name", user.lastName],
+                ["Username", user.username],
+                ["Phone", user.phone],
+                ["Gender", user.gender],
+                ["Date of Birth", formatDateOnly(user.dob)],
+                ["Email", user.email],
+                ["City / Place", user.city],
+                ["Status", user.status],
+                ["Marriage Date", formatDateOnly(user.marriageDate)],
+                ["Church Name", user.churchName],
+                ["Pastor Name", user.pastorName],
+                ["Church Location", user.churchLocation]
+            ];
+
+            profileGrid.innerHTML = items.map((item, index) =>
+                renderInfoBox(item[0], item[1], index + 1)
+            ).join("");
+
+            profileSection.classList.remove("hidden");
+            profileSection.classList.add("fade-in");
+        }
+
+        function renderRegistrations(rows) {
+            registrationContent.innerHTML = renderTable(rows, "registration");
+            registrationSection.classList.remove("hidden");
+            registrationSection.classList.add("fade-in");
+        }
+
+        function renderArrivals(rows) {
+            arrivalContent.innerHTML = renderTable(rows, "arrival");
+            arrivalSection.classList.remove("hidden");
+            arrivalSection.classList.add("fade-in");
+        }
+
+        loginForm.addEventListener("submit", handleLogin);
+        logoutBtn.addEventListener("click", logout);
+        searchBtn.addEventListener("click", findUser);
+
+        searchInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                findUser();
+            }
+        });
+
+        (async function init() {
+            if (!adminToken) {
+                showLogin();
+                return;
+            }
+
+            try {
+                showLoading("Restoring session...", "Loading admin data and previous session.");
+                await loadInitialData();
+                showApp();
+            } catch (error) {
+                console.error(error);
+                sessionStorage.removeItem("adminToken");
+                adminToken = "";
+                showLogin();
+            }
+            hideLoading();
+        })();
+    </script>
+</body>
+</html>
