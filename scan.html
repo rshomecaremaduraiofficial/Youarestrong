@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -42,22 +42,22 @@
             z-index: 0;
         }
 
-            .bg-glow.one {
-                width: 260px;
-                height: 260px;
-                background: rgba(255,255,255,0.20);
-                top: 5%;
-                left: 4%;
-            }
+        .bg-glow.one {
+            width: 260px;
+            height: 260px;
+            background: rgba(255,255,255,0.20);
+            top: 5%;
+            left: 4%;
+        }
 
-            .bg-glow.two {
-                width: 320px;
-                height: 320px;
-                background: rgba(173,216,255,0.14);
-                right: 4%;
-                bottom: 4%;
-                animation-delay: 2s;
-            }
+        .bg-glow.two {
+            width: 320px;
+            height: 320px;
+            background: rgba(173,216,255,0.14);
+            right: 4%;
+            bottom: 4%;
+            animation-delay: 2s;
+        }
 
         .loading-screen {
             position: fixed;
@@ -70,10 +70,10 @@
             transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
-            .loading-screen.hide {
-                opacity: 0;
-                visibility: hidden;
-            }
+        .loading-screen.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
 
         .loading-box {
             width: min(420px, calc(100% - 28px));
@@ -157,12 +157,12 @@
             transition: transform 0.3s ease, background 0.3s ease, opacity 0.3s ease;
         }
 
-            .back-link:hover,
-            .logout-btn:hover {
-                transform: translateY(-2px);
-                background: rgba(255,255,255,0.12);
-                opacity: 0.95;
-            }
+        .back-link:hover,
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.12);
+            opacity: 0.95;
+        }
 
         .topbar-right {
             display: flex;
@@ -183,17 +183,17 @@
             margin-bottom: 22px;
         }
 
-            .glass-card::before {
-                content: "";
-                position: absolute;
-                width: 220px;
-                height: 220px;
-                border-radius: 50%;
-                background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
-                top: -90px;
-                right: -90px;
-                pointer-events: none;
-            }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(rgba(255,255,255,0.10), transparent 70%);
+            top: -90px;
+            right: -90px;
+            pointer-events: none;
+        }
 
         .hero-card,
         .login-card {
@@ -271,16 +271,16 @@
             transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
         }
 
-            .login-input::placeholder {
-                color: rgba(255,255,255,0.48);
-            }
+        .login-input::placeholder {
+            color: rgba(255,255,255,0.48);
+        }
 
-            .login-input:focus {
-                border-color: rgba(255,255,255,0.30);
-                background: rgba(255,255,255,0.11);
-                box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
-                transform: translateY(-1px);
-            }
+        .login-input:focus {
+            border-color: rgba(255,255,255,0.30);
+            background: rgba(255,255,255,0.11);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+        }
 
         .login-btn {
             border: none;
@@ -298,15 +298,15 @@
             gap: 10px;
         }
 
-            .login-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
-            }
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+        }
 
-            .login-btn:disabled {
-                opacity: 0.7;
-                cursor: not-allowed;
-            }
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
 
         .btn-spinner {
             width: 18px;
@@ -358,10 +358,10 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease, background 0.25s ease;
         }
 
-            button.action-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px rgba(0,0,0,0.16);
-            }
+        button.action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.16);
+        }
 
         #scanBtn {
             background: white;
@@ -396,26 +396,26 @@
             z-index: 1;
         }
 
-            .status.info {
-                display: block;
-                background: rgba(13, 110, 253, 0.20);
-                border: 1px solid rgba(255,255,255,0.12);
-                color: #d9ebff;
-            }
+        .status.info {
+            display: block;
+            background: rgba(13, 110, 253, 0.20);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #d9ebff;
+        }
 
-            .status.success {
-                display: block;
-                background: rgba(25, 135, 84, 0.20);
-                border: 1px solid rgba(255,255,255,0.12);
-                color: #dcffe9;
-            }
+        .status.success {
+            display: block;
+            background: rgba(25, 135, 84, 0.20);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #dcffe9;
+        }
 
-            .status.error {
-                display: block;
-                background: rgba(220, 53, 69, 0.18);
-                border: 1px solid rgba(255,255,255,0.12);
-                color: #ffd8dd;
-            }
+        .status.error {
+            display: block;
+            background: rgba(220, 53, 69, 0.18);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #ffd8dd;
+        }
 
         #reader {
             width: 100%;
@@ -446,10 +446,10 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-            .card:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 12px 22px rgba(0,0,0,0.14);
-            }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 22px rgba(0,0,0,0.14);
+        }
 
         .label {
             font-size: 13px;
@@ -488,7 +488,6 @@
                 opacity: 0;
                 transform: translateY(24px) scale(0.985);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -500,7 +499,6 @@
                 opacity: 0;
                 transform: translateY(18px) scale(0.98);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -511,7 +509,6 @@
             0%, 100% {
                 transform: translate(0, 0) scale(1);
             }
-
             50% {
                 transform: translate(14px, -18px) scale(1.05);
             }
@@ -521,7 +518,6 @@
             0%, 100% {
                 transform: translateY(0);
             }
-
             50% {
                 transform: translateY(-6px);
             }
@@ -606,7 +602,6 @@
         </div>
     </div>
 
-    <!-- LOGIN -->
     <div class="login-wrap hidden" id="loginWrap">
         <div class="glass-card login-card">
             <div class="login-icon">🔐</div>
@@ -638,7 +633,6 @@
         </div>
     </div>
 
-    <!-- APP -->
     <div class="page hidden" id="appPage">
         <div class="topbar">
             <a href="index.html" class="back-link">← Back to Home</a>
@@ -677,6 +671,7 @@
                 <div class="card"><div class="label">Registered At</div><div class="value" id="registeredAt">-</div></div>
                 <div class="card"><div class="label">First Name</div><div class="value" id="firstName">-</div></div>
                 <div class="card"><div class="label">Last Name</div><div class="value" id="lastName">-</div></div>
+                <div class="card"><div class="label">Gender</div><div class="value" id="gender">-</div></div>
                 <div class="card"><div class="label">Date of Birth</div><div class="value" id="dob">-</div></div>
                 <div class="card"><div class="label">Age</div><div class="value" id="age">-</div></div>
                 <div class="card"><div class="label">Mobile Number</div><div class="value" id="mobile">-</div></div>
@@ -700,11 +695,6 @@
     <script>
         const API_BASE_URL = "https://script.google.com/macros/s/AKfycbwnbwhM0OGaDOoOJ59U5DIuiYfZ9mV5Wr8dQ-1_vwC_hVmds09td-0wSozzGnlA0K0xXg/exec";
 
-        /*
-          FRONT-END LOGIN ONLY
-          Replace these with your values for demo use.
-          For real protection, validate on backend and return a session/token.
-        */
         const AUTH_CONFIG = {
             username: "Scan",
             password: "123456"
@@ -731,6 +721,7 @@
             registeredAt: document.getElementById("registeredAt"),
             firstName: document.getElementById("firstName"),
             lastName: document.getElementById("lastName"),
+            gender: document.getElementById("gender"),
             dob: document.getElementById("dob"),
             age: document.getElementById("age"),
             mobile: document.getElementById("mobile"),
@@ -792,6 +783,7 @@
             els.registeredAt.textContent = ticket.registeredAt || "-";
             els.firstName.textContent = ticket.firstName || "-";
             els.lastName.textContent = ticket.lastName || "-";
+            els.gender.textContent = ticket.gender || "-";
             els.dob.textContent = ticket.dob || "-";
             els.age.textContent = ticket.age || "-";
             els.mobile.textContent = ticket.mobile || "-";
